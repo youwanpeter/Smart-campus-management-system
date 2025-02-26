@@ -8,6 +8,15 @@
   margin: 24px 16px;
   padding: 20px;
 }
+
+.triger-btn {
+  font-size: 16px;
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+}
 /*Sider */
 
 .sider {
@@ -22,4 +31,62 @@
   color: #4f6f52;
   margin: 30px 0;
   font-size: 1.5rem;
+}
+
+.menu-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.ant-menu-item-selected {
+  background-color: #4f6f52 !important;
+  color: #fff !important;
+}
+
+/*Header*/
+
+.header-icon {
+  background: #d2e3c8;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 15px;
+  color: #4f6f52;
+  cursor: pointer;
+}
+
+/*button and colors*/
+.ant-btn:hover {
+  color: #4f6f52 !important;
+  border-color: #4f6f52 !important;
+}
+
+.ant-btn-primary {
+  background-color: #4f6f52;
+}
+
+.ant-btn-primary:hover {
+  background-color: #173a1a !important;
+  color: #fff !important;
+}
+
+.primary--color {
+  color: #4f6f52 !important;
+}
+
+.primary--light--color {
+  color: #739072 !important;
+}
+
+.secondary--color {
+  color: #86a789 !important;
+}
+
+.light--color {
+  color: #d2e3c8 !important;
+}
+
+.gray--color {
+  color: rgb(182, 181, 181) !important;
 }
