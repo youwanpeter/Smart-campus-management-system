@@ -26,7 +26,7 @@ const Table = () => {
       organizer_name: "Tech Inc.",
       created_at: "2025-01-01",
       updated_at: "2025-01-10",
-      status: "Upcoming",
+      status: "Pending",
     },
     {
       event_id: "002",
@@ -37,7 +37,7 @@ const Table = () => {
       organizer_name: "Venture Capitalists",
       created_at: "2025-02-01",
       updated_at: "2025-02-05",
-      status: "Upcoming",
+      status: "Pending",
     },
     // Add more rows here
   ]);
@@ -93,9 +93,9 @@ const Table = () => {
           style={{ width: 120 }}
           onChange={(value) => handleStatusChange(value, record.event_id)}
         >
-          <Select.Option value="Upcoming">Upcoming</Select.Option>
-          <Select.Option value="Completed">Completed</Select.Option>
-          <Select.Option value="Cancelled">Cancelled</Select.Option>
+          <Select.Option value="Pending">Pending</Select.Option>
+          <Select.Option value="Published">Published</Select.Option>
+          <Select.Option value="Unpublished">Unpublished</Select.Option>
         </Select>
       ),
     },
@@ -203,14 +203,6 @@ const Table = () => {
         cancelText="Cancel"
       >
         <Form form={form} layout="vertical" name="event_form">
-          <Form.Item
-            name="event_id"
-            label="Event ID"
-            rules={[{ required: true, message: "Please input event ID!" }]}
-          >
-            <Input disabled={editingEvent} />
-          </Form.Item>
-
           <Form.Item
             name="event_name"
             label="Event Name"
