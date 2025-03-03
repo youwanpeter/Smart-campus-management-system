@@ -6,7 +6,7 @@ import {
   FileDoneOutlined,
 } from "@ant-design/icons";
 import "./Dashboard.css";
-import Graphs from "./components/Graphs";
+import Graphs from "./components/dashboard/Graphs";
 
 const Dashboard = () => {
   return (
