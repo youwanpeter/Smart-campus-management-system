@@ -94,3 +94,7 @@
 .gray--color {
   color: rgb(182, 181, 181) !important;
 }
+
+.Dash-card {
+  left: 10px;
+}
