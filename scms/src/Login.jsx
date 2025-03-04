@@ -15,7 +15,7 @@ const Login = () => {
 
             {/* Content */}
             <div className="form-content">
-                <FaLeaf className="logo" />
+                <FaLeaf className="logo-icon" />
                 <h2>Login/Sign Up</h2>
                 <p>Welcome! Please enter your credentials below.</p>
 
