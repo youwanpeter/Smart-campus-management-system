@@ -9,8 +9,10 @@ import {
   Select,
   message,
   Popconfirm,
+  Upload,
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 
 const Table = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -27,6 +29,7 @@ const Table = () => {
       created_at: "2025-01-01",
       updated_at: "2025-01-10",
       status: "Pending",
+      event_image: "", // New field for image
     },
     {
       event_id: "002",
@@ -38,9 +41,12 @@ const Table = () => {
       created_at: "2025-02-01",
       updated_at: "2025-02-05",
       status: "Pending",
+      event_image: "", // New field for image
     },
     // Add more rows here
   ]);
+
+  const [image, setImage] = useState(null); // State for image upload
 
   const columns = [
     {
@@ -84,6 +90,20 @@ const Table = () => {
       key: "updated_at",
     },
     {
+      title: "Event Image",
+      key: "event_image",
+      render: (text, record) =>
+        record.event_image ? (
+          <img
+            src={record.event_image}
+            alt="Event"
+            style={{ width: 50, height: 50, objectFit: "cover" }}
+          />
+        ) : (
+          <span>No Image</span>
+        ),
+    },
+    {
       title: "Status",
       dataIndex: "status",
       key: "status",
@@ -122,7 +142,6 @@ const Table = () => {
     },
   ];
 
-  // Handle the status change
   const handleStatusChange = (value, event_id) => {
     const updatedData = data.map((item) =>
       item.event_id === event_id ? { ...item, status: value } : item
@@ -131,54 +150,66 @@ const Table = () => {
     message.success(`Status updated to ${value}`);
   };
 
-  // Handle edit action
   const handleEdit = (event) => {
     setEditingEvent(event);
-    form.setFieldsValue(event); // Pre-fill the form with event details
+    form.setFieldsValue(event);
+    setImage(event.event_image); // Set image when editing
     setIsModalVisible(true);
   };
 
-  // Handle modal close
   const handleCancel = () => {
     setIsModalVisible(false);
-    setEditingEvent(null); // Reset the editing event
+    setEditingEvent(null);
+    setImage(null); // Reset image state on modal close
   };
 
-  // Handle form submission (creating or updating an event)
   const handleCreateOrUpdate = () => {
     form
       .validateFields()
       .then((values) => {
         if (editingEvent) {
-          // Update the event
           const updatedData = data.map((item) =>
             item.event_id === editingEvent.event_id
-              ? { ...item, ...values }
+              ? { ...item, ...values, event_image: image }
               : item
           );
           setData(updatedData);
           message.success("Event updated successfully");
         } else {
-          // Create a new event
-          const newEvent = { ...values, event_id: Date.now().toString() }; // Generate a new event ID
+          const newEvent = {
+            ...values,
+            event_id: Date.now().toString(),
+            event_image: image,
+          };
           setData([...data, newEvent]);
           message.success("Event created successfully");
         }
 
         setIsModalVisible(false);
-        form.resetFields(); // Reset form fields
-        setEditingEvent(null); // Clear editing state
+        form.resetFields();
+        setEditingEvent(null);
+        setImage(null); // Reset image state after form submission
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
       });
   };
 
-  // Handle delete action
   const handleDelete = (event_id) => {
     const updatedData = data.filter((item) => item.event_id !== event_id);
     setData(updatedData);
     message.success("Event deleted successfully");
+  };
+
+  const handleImageUpload = (file) => {
+    const isImage = file.type.startsWith("image/");
+    if (!isImage) {
+      message.error("You can only upload image files!");
+      return Upload.LIST_IGNORE; // Reject file
+    }
+
+    setImage(URL.createObjectURL(file)); // Set the image locally (for preview)
+    return false; // Prevent auto upload (you can implement manual upload)
   };
 
   return (
@@ -247,6 +278,24 @@ const Table = () => {
             ]}
           >
             <Input />
+          </Form.Item>
+
+          {/* Image Upload Field */}
+          <Form.Item label="Event Image">
+            <Upload
+              listType="picture-card"
+              showUploadList={false}
+              customRequest={handleImageUpload}
+            >
+              {image ? (
+                <img src={image} alt="event" style={{ width: "100%" }} />
+              ) : (
+                <div>
+                  <UploadOutlined />
+                  <div>Upload</div>
+                </div>
+              )}
+            </Upload>
           </Form.Item>
         </Form>
       </Modal>
