@@ -1,19 +1,32 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
+import "./Login.css";
+import LoginForm from "./pages/components/Logincontent/LoginForm";
+import { FaLeaf } from "react-icons/fa6"; 
 
 const Login = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  return (
-    <div style={{ textAlign: "center", marginTop: "20%" }}>
-      <h2>Login Page</h2>
-      <p>Welcome! Click below to go to the main app.</p>
-      <Button type="primary" onClick={() => navigate("/app")}>
-        Enter App
-      </Button>
-    </div>
-  );
+    return (
+        <section className="LoginForm">
+            {/* Gradient BG */}
+            <div className="animated-background"></div>
+
+            {/* Content */}
+            <div className="form-content">
+                <FaLeaf className="logo" />
+                <h2>Login/Sign Up</h2>
+                <p>Welcome! Please enter your credentials below.</p>
+
+                <LoginForm />
+
+                <Button type="primary" onClick={() => navigate("/app")}>
+                    Login
+                </Button>
+            </div>
+        </section>
+    );
 };
 
 export default Login;
