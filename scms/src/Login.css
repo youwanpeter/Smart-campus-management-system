@@ -42,9 +42,12 @@
     position: relative;
     z-index: 2;
     text-align: center;
-    color: white;
+    color: black;
     padding: 20px;
     width: 350px;
+    background-color: white;
+    border-radius: 10px;
+    
 }
 
 .ant-btn-primary {
