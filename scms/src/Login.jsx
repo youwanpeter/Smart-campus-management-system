@@ -16,12 +16,12 @@ const Login = () => {
             {/* Content */}
             <div className="form-content">
                 <FaLeaf className="logo-icon" />
-                <h2>Login/Sign Up</h2>
+                <h2>Login</h2>
                 <p>Welcome! Please enter your credentials below.</p>
 
                 <LoginForm />
 
-                <Button type="primary" onClick={() => navigate("/app")}>
+                <Button type="primary" onClick={() => navigate("/")}>
                     Login
                 </Button>
             </div>
