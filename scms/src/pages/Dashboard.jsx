@@ -5,7 +5,7 @@ import {
   AppstoreAddOutlined,
   FileDoneOutlined,
 } from "@ant-design/icons";
-import "./Dashboard.css";
+import "../css/Dashboard.css";
 import Graphs from "./components/dashboard/Graphs";
 
 const Dashboard = () => {

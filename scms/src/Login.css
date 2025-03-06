@@ -45,9 +45,10 @@
   padding: 40px;
 }
 
-.ant-btn-primary {
+.login {
   width: 150px;
   height: 50px;
+  color: #fff;
   margin-bottom: 5px;
 }
 
