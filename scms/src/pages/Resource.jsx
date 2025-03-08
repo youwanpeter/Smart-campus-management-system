@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/Resource.css";
+import ResourceTable from "./components/resource/ResourceTable";
 
 const Resource = () => {
   return <div>Resource</div>;
