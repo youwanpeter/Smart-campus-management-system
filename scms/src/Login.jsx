@@ -18,12 +18,7 @@ const Login = () => {
         <FaLeaf className="logo-icon" />
         <h2>Login</h2>
         <p>Welcome! Please enter your credentials below.</p>
-
         <LoginForm />
-
-        <Button type="primary" className="login" onClick={() => navigate("/")}>
-          Login
-        </Button>
       </div>
     </section>
   );
