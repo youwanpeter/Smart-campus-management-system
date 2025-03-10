@@ -1,24 +1,46 @@
+# Node modules
+node_modules/
+
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Environment variables
+#.env
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Build directories
+/dist
+/build
+
+# OS-specific files
+.DS_Store   # macOS specific
+Thumbs.db   # Windows specific
+
+# IDE/editor directories and files
+.vscode/
+.idea/
+*.swp        # Vim swap files
+
+# Dependency directories
+bower_components/
+
+# Coverage directory (for test coverage)
+coverage/
+
+# Temp files
+*.tmp
+*.temp
+
+# Debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional: If using Docker
+docker-compose.override.yml
+
+# Optional: If using production build
+/prod/
