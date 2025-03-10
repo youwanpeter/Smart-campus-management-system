@@ -47,6 +47,7 @@ const LoginForm = () => {
       <Button
         type="primary"
         htmlType="submit"
+        loading={loading}
       >
         Login
       </Button>
