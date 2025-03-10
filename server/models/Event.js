@@ -1,25 +1,24 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const EventSchema = new mongoose.Schema(
   {
-    event_id: { type: String, unique: true, required: true }, // Unique event identifier
-    event_name: { type: String, required: true }, // Name of the event
-    event_description: { type: String, required: true }, // Event details
-    event_date: { type: Date, required: true }, // Date of the event
-    event_location: { type: String, required: true }, // Location of the event
-    organizer_name: { type: String, required: true }, // Name of the organizer
-    created_at: { type: Date, default: Date.now }, // Creation timestamp
-    updated_at: { type: Date, default: Date.now }, // Last update timestamp
+    event_id: { type: String, unique: true, required: true },
+    event_name: { type: String, required: true },
+    event_description: { type: String, required: true },
+    event_date: { type: Date, required: true },
+    event_location: { type: String, required: true },
+    organizer_name: { type: String, required: true },
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now },
     status: {
       type: String,
-      enum: ["Pending", "Published", "Unpublished"], // Event status
+      enum: ["Pending", "Published", "Unpublished"],
       default: "Pending",
     },
-    event_image: { type: String, default: "" }, // Image URL (stored in Cloudinary, Firebase, or local server)
+    event_image: { type: String, default: "" },
   },
-  { timestamps: true } // Enables automatic createdAt & updatedAt fields
+  { timestamps: true }
 );
 
-const EventModel = mongoose.model("Event", EventSchema);
-
+const EventModel = mongoose.model('Event', EventSchema);
 module.exports = EventModel;

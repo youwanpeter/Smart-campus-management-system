@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const connectDB = require('./db');
 const Login_detialsModel = require('./models/Login_details.js');
+const EventModel = require('./models/Event.js');
 const cors = require('cors');
 
 const app = express();
