@@ -47,7 +47,7 @@ const Table = () => {
   ]);
 
   const [image, setImage] = useState(null); // State for image upload
-
+  
   const columns = [
     {
       title: "Event ID",

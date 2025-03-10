@@ -1,8 +1,14 @@
 import React from "react";
-import "../css/Resource.css";
+import ResourceTable from "./components/resource/ResourceTable";
 
 const Resource = () => {
-  return <div>Resource</div>;
+  {
+    return (
+      <div style={{ padding: 20 }}>
+        <ResourceTable />
+      </div>
+    );
+  };  
 };
 
 export default Resource;
