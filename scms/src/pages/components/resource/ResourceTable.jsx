@@ -161,14 +161,14 @@ const ResourceTable = () => {
             label="Acquired Date"
             rules={[{ required: true }]}
           >
-            <DatePicker />
+            <DatePicker style={{ width: "100%" }} />
           </Form.Item>
           <Form.Item
             name="resource_ret_date"
             label="Return Date"
             rules={[{ required: true }]}
           >
-            <DatePicker />
+            <DatePicker style={{ width: "100%" }} />
           </Form.Item>
           <Form.Item
             name="resource_person"
