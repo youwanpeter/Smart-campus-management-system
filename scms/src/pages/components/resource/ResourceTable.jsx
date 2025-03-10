@@ -40,7 +40,9 @@ const ResourceTable = () => {
     if (editingResource) {
       setData(
         data.map((item) =>
-          item.key === editingResource.key ? { ...item, ...formattedValues } : item
+          item.key === editingResource.key
+            ? { ...item, ...formattedValues }
+            : item
         )
       );
       message.success("Resource updated successfully!");
@@ -77,8 +79,16 @@ const ResourceTable = () => {
   const Resourcecolumns = [
     { title: "Resource ID", dataIndex: "key", key: "key" },
     { title: "Resource Name", dataIndex: "resource_name", key: "Name" },
-    { title: "Acquired Date", dataIndex: "resource_acq_date", key: "Acquired data" },
-    { title: "Return Date", dataIndex: "resource_ret_date", key: "Returned date" },
+    {
+      title: "Acquired Date",
+      dataIndex: "resource_acq_date",
+      key: "Acquired data",
+    },
+    {
+      title: "Return Date",
+      dataIndex: "resource_ret_date",
+      key: "Returned date",
+    },
     { title: "Acquired By", dataIndex: "resource_person", key: "Acquired by" },
     { title: "Department", dataIndex: "resource_dep", key: "Department" },
     { title: "Purpose", dataIndex: "resource_purpose", key: "Purpose" },
@@ -88,8 +98,15 @@ const ResourceTable = () => {
       key: "actions",
       render: (_, resource) => (
         <div>
-          <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(resource)} />
-          <Popconfirm title="Delete this resource?" onConfirm={() => handleDelete(resource.key)}>
+          <Button
+            type="link"
+            icon={<EditOutlined />}
+            onClick={() => handleEdit(resource)}
+          />
+          <Popconfirm
+            title="Delete this resource?"
+            onConfirm={() => handleDelete(resource.key)}
+          >
             <Button type="link" icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
@@ -127,23 +144,51 @@ const ResourceTable = () => {
           </Button>,
         ]}
       >
-        <Form form={form} layout="vertical" onFinish={handleAddOrUpdateResource}>
-          <Form.Item name="resource_name" label="Resource Name" rules={[{ required: true }]}>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleAddOrUpdateResource}
+        >
+          <Form.Item
+            name="resource_name"
+            label="Resource Name"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="resource_acq_date" label="Acquired Date" rules={[{ required: true }]}>
+          <Form.Item
+            name="resource_acq_date"
+            label="Acquired Date"
+            rules={[{ required: true }]}
+          >
             <DatePicker />
           </Form.Item>
-          <Form.Item name="resource_ret_date" label="Return Date" rules={[{ required: true }]}>
+          <Form.Item
+            name="resource_ret_date"
+            label="Return Date"
+            rules={[{ required: true }]}
+          >
             <DatePicker />
           </Form.Item>
-          <Form.Item name="resource_person" label="Acquired By" rules={[{ required: true }]}>
+          <Form.Item
+            name="resource_person"
+            label="Acquired By"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="resource_dep" label="Department" rules={[{ required: true }]}>
+          <Form.Item
+            name="resource_dep"
+            label="Department"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="resource_purpose" label="Purpose" rules={[{ required: true }]}>
+          <Form.Item
+            name="resource_purpose"
+            label="Purpose"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item name="resource_remarks" label="Remarks">
