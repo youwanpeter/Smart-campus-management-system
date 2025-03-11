@@ -5,7 +5,7 @@ import "/src/Login.css";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const handleLogin = async (values) => {
     setLoading(true);
     try {
@@ -53,6 +53,7 @@ const LoginForm = () => {
         Login
       </Button>
     </Form>
+
   );
 };
 
