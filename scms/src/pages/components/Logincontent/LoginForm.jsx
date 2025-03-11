@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
 import { Input, Form, Button, message } from "antd";
-=======
-import React, { useState } from 'react';
-import { Input, Form, Button, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
->>>>>>> 2b49090027b5e0cfff0e30fa98705acbc5464837
+import { useNavigate } from "react-router-dom";
 import "/src/Login.css";
 
 const LoginForm = () => {
@@ -16,10 +11,7 @@ const LoginForm = () => {
     try {
       const response = await fetch("http://localhost:5000/api/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
 
@@ -53,19 +45,10 @@ const LoginForm = () => {
         <Input.Password placeholder="Enter your password" />
       </Form.Item>
 
-<<<<<<< HEAD
-      <Button type="primary" htmlType="submit">
-=======
-      <Button
-        type="primary"
-        htmlType="submit"
-        loading={loading}
-      >
->>>>>>> 2b49090027b5e0cfff0e30fa98705acbc5464837
+      <Button type="primary" htmlType="submit" loading={loading}>
         Login
       </Button>
     </Form>
-
   );
 };
 
