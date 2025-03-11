@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { Input, Form, Button, message } from "antd";
+=======
+import React, { useState } from 'react';
+import { Input, Form, Button, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
+>>>>>>> 2b49090027b5e0cfff0e30fa98705acbc5464837
 import "/src/Login.css";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
   const handleLogin = async (values) => {
     setLoading(true);
     try {
@@ -19,7 +25,7 @@ const LoginForm = () => {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.status === 200) {
         message.success(data.message);
         navigate("/");
       } else {
@@ -47,7 +53,15 @@ const LoginForm = () => {
         <Input.Password placeholder="Enter your password" />
       </Form.Item>
 
+<<<<<<< HEAD
       <Button type="primary" htmlType="submit">
+=======
+      <Button
+        type="primary"
+        htmlType="submit"
+        loading={loading}
+      >
+>>>>>>> 2b49090027b5e0cfff0e30fa98705acbc5464837
         Login
       </Button>
     </Form>
