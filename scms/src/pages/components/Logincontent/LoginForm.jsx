@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Input, Form, Button, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import "/src/Login.css";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
   const handleLogin = async (values) => {
     setLoading(true);
     try {
@@ -16,7 +17,7 @@ const LoginForm = () => {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.status === 200) {
         message.success(data.message);
         navigate("/");
       } else {
