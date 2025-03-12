@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./db');
-const Login_detialsModel = require('./models/Login_details.js');
+const Login_details = require('./models/Login_details.js');
 const EventModel = require('./models/Event.js');
 const UserModel = require('./models/Users.js');
 const cors = require('cors');
@@ -17,25 +17,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 connectDB();
 
-app.post('/api/login', async (req, res) => {
-    const { username, password } = req.body;
-
-    try {
-        const user = await Login_detialsModel.findOne({ username });
-
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid username or password' });
-        }
-
-        if (user.password !== password) {
-            return res.status(400).json({ message: 'Invalid username or password' });
-        }
-
-        res.status(200).json({ message: 'Login successful' });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error' });
-    }
-});
+app.use("/api/login", require("./routes/loginRoute.js"));
 
 app.get('/', (req, res) => {
     res.send('API is running...');

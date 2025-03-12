@@ -12,6 +12,6 @@ const Login_detialsSchema = new mongoose.Schema({
     }
 });
 
-const Login_detialsModel = mongoose.model('Login', Login_detialsSchema );
+const Login_detailsModel = mongoose.model('Login', Login_detialsSchema );
 
-module.exports = Login_detialsModel;
+module.exports = Login_detailsModel;
