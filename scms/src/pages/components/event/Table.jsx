@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table as AntTable,
   Button,
@@ -13,40 +13,22 @@ import {
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { UploadOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 const Table = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingEvent, setEditingEvent] = useState(null);
-  const [data, setData] = useState([
-    {
-      event_id: "001",
-      event_name: "Tech Conference",
-      event_description: "A tech conference about AI advancements.",
-      event_date: "2025-04-10",
-      event_location: "London",
-      organizer_name: "Tech Inc.",
-      created_at: "2025-01-01",
-      updated_at: "2025-01-10",
-      status: "Pending",
-      event_image: "", // New field for image
-    },
-    {
-      event_id: "002",
-      event_name: "Startup Pitch",
-      event_description: "A pitch event for startups.",
-      event_date: "2025-05-15",
-      event_location: "New York",
-      organizer_name: "Venture Capitalists",
-      created_at: "2025-02-01",
-      updated_at: "2025-02-05",
-      status: "Pending",
-      event_image: "", // New field for image
-    },
-    // Add more rows here
-  ]);
-
+  const [data, setData] = useState([]); // Data fetched from API
   const [image, setImage] = useState(null); // State for image upload
+
+  // Fetch events data from the backend when the component mounts
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/events/all")
+      .then((response) => setData(response.data))
+      .catch((error) => console.error("Error fetching events:", error));
+  }, []);
 
   const columns = [
     {
