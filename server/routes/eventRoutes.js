@@ -34,6 +34,9 @@ router.put("/update/:event_id", async (req, res) => {
       req.body,
       { new: true }
     );
+    if (!updatedEvent) {
+      return res.status(404).json({ error: "Event not found" });
+    }
     res.status(200).json(updatedEvent);
   } catch (error) {
     res.status(500).json({ error: "Failed to update event" });
@@ -43,7 +46,12 @@ router.put("/update/:event_id", async (req, res) => {
 // Delete Event
 router.delete("/delete/:event_id", async (req, res) => {
   try {
-    await Event.findOneAndDelete({ event_id: req.params.event_id });
+    const deletedEvent = await Event.findOneAndDelete({
+      event_id: req.params.event_id,
+    });
+    if (!deletedEvent) {
+      return res.status(404).json({ error: "Event not found" });
+    }
     res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete event" });
