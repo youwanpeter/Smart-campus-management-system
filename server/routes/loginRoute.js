@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const Login = require("../models/Login_details.js");
+const User = require("../models/Users.js");
 
+//Post make sure data is returned to client if the status is 200
 router.post("/", async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const user = await Login.findOne({ username });
+        const user = await User.findOne({ username });
 
         if (!user) {
             return res.status(400).json({ message: 'Invalid username or password' });
