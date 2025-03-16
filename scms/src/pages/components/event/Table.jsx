@@ -14,6 +14,7 @@ import {
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const Table = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -125,11 +126,21 @@ const Table = () => {
   ];
 
   const handleStatusChange = (value, event_id) => {
-    const updatedData = data.map((item) =>
-      item.event_id === event_id ? { ...item, status: value } : item
-    );
-    setData(updatedData);
-    message.success(`Status updated to ${value}`);
+    axios
+      .put(`http://localhost:5000/api/events/update/${event_id}`, {
+        status: value,
+      })
+      .then((response) => {
+        const updatedData = data.map((item) =>
+          item.event_id === event_id ? { ...item, status: value } : item
+        );
+        setData(updatedData);
+        message.success(`Status updated to ${value}`);
+      })
+      .catch((error) => {
+        console.error("Error updating status:", error);
+        message.error("Failed to update status");
+      });
   };
 
   const handleEdit = (event) => {
@@ -149,22 +160,62 @@ const Table = () => {
     form
       .validateFields()
       .then((values) => {
+        const eventDate = values.event_date ? dayjs(values.event_date) : null;
+        if (!eventDate || !eventDate.isValid()) {
+          message.error("Invalid date selected.");
+          return;
+        }
+
         if (editingEvent) {
-          const updatedData = data.map((item) =>
-            item.event_id === editingEvent.event_id
-              ? { ...item, ...values, event_image: image }
-              : item
-          );
-          setData(updatedData);
-          message.success("Event updated successfully");
+          console.log("Updating event with ID:", editingEvent.event_id);
+          console.log("Request body:", { ...values, event_image: image });
+
+          axios
+            .put(
+              `http://localhost:5000/api/events/update/${editingEvent.event_id}`,
+              {
+                ...values,
+                event_image: image,
+                event_date: eventDate.toISOString(), // Ensure the correct format
+              }
+            )
+            .then((response) => {
+              const updatedData = data.map((item) =>
+                item.event_id === editingEvent.event_id
+                  ? {
+                      ...item,
+                      ...values,
+                      event_image: image,
+                      event_date: eventDate,
+                    }
+                  : item
+              );
+              setData(updatedData);
+              message.success("Event updated successfully");
+            })
+            .catch((error) => {
+              console.error("Error updating event:", error);
+              message.error("Failed to update event");
+            });
         } else {
           const newEvent = {
             ...values,
             event_id: Date.now().toString(),
             event_image: image,
+            event_date: eventDate.toISOString(), // Ensure the correct format
           };
-          setData([...data, newEvent]);
-          message.success("Event created successfully");
+          console.log("Creating new event:", newEvent);
+
+          axios
+            .post("http://localhost:5000/api/events/create", newEvent)
+            .then((response) => {
+              setData([...data, response.data]);
+              message.success("Event created successfully");
+            })
+            .catch((error) => {
+              console.error("Error creating event:", error);
+              message.error("Failed to create event");
+            });
         }
 
         setIsModalVisible(false);
@@ -178,13 +229,26 @@ const Table = () => {
   };
 
   const handleDelete = (event_id) => {
-    const updatedData = data.filter((item) => item.event_id !== event_id);
-    setData(updatedData);
-    message.success("Event deleted successfully");
+    axios
+      .delete(`http://localhost:5000/api/events/delete/${event_id}`)
+      .then((response) => {
+        const updatedData = data.filter((item) => item.event_id !== event_id);
+        setData(updatedData);
+        message.success("Event deleted successfully");
+      })
+      .catch((error) => {
+        console.error("Error deleting event:", error);
+        message.error("Failed to delete event");
+      });
   };
 
-  const handleImageUpload = (file) => {
-    const isImage = file.type.startsWith("image/");
+  const handleImageUpload = ({ file }) => {
+    if (!file) {
+      message.error("No file selected!");
+      return Upload.LIST_IGNORE; // Reject file
+    }
+
+    const isImage = file.type && file.type.startsWith("image/");
     if (!isImage) {
       message.error("You can only upload image files!");
       return Upload.LIST_IGNORE; // Reject file
@@ -239,7 +303,10 @@ const Table = () => {
             label="Event Date"
             rules={[{ required: true, message: "Please select event date!" }]}
           >
-            <DatePicker style={{ width: "100%" }} />
+            <DatePicker
+              style={{ width: "100%" }}
+              value={editingEvent ? dayjs(editingEvent.event_date) : null} // ensure the date is in the correct format
+            />
           </Form.Item>
 
           <Form.Item
