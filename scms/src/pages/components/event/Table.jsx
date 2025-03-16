@@ -144,6 +144,7 @@ const Table = () => {
   };
 
   const handleEdit = (event) => {
+    console.log("Editing event:", event);
     setEditingEvent(event);
     form.setFieldsValue(event);
     setImage(event.event_image); // Set image when editing
