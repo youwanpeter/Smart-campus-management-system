@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/Users.js");
 const jwt = require("jsonwebtoken");
 
-const SECRET_KEY = "loginAuthentication"; 
+const SECRET_KEY = "loginAuthentication";
 
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
     const token = jwt.sign(
       { username: user.username },
       SECRET_KEY,
-      { expiresIn: "1h" } 
+      { expiresIn: "1h" }
     );
 
     res.status(200).json({ message: "Login successful", token });

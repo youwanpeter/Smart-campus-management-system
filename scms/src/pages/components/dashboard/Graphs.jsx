@@ -1,4 +1,5 @@
 import React from "react";
+import "/src/App.css";
 import { Card, Row, Col } from "antd";
 import {
   LineChart,
@@ -21,7 +22,7 @@ const Graphs = () => {
   ];
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div class="graph">
       <Row gutter={16}>
         {/* Line Chart Card */}
         <Col xs={24} sm={24} md={12}>

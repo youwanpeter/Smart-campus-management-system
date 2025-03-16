@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import moment from "moment";
 import {
   Table as AntTable,
@@ -11,26 +12,30 @@ import {
   Popconfirm,
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { FaCreativeCommonsNcJp } from "react-icons/fa6";
 
 const ResourceTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingResource, setEditingResource] = useState(null);
-  const [data, setData] = useState([
-    {
-      key: "001",
-      resource_name: "Microphones",
-      resource_acq_date: "2025-03-01",
-      resource_ret_date: "2025-03-06",
-      resource_person: "Youwan Peter",
-      resource_dep: "Finance",
-      resource_purpose: "Annual CEO Forum",
-      resource_status: "Returned",
-      resource_remarks: "Was borrowed for the event",
-    },
-  ]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [data, setData] = useState([]);
 
-  const handleAddOrUpdateResource = (values) => {
+  useEffect(() => {
+      fetchResources();
+    }, []);
+  
+    const fetchResources = async () => {
+      const response = await axios.get("http://localhost:5000/api/resources");
+      setData(response.data);
+    };
+
+  const handleAddOrUpdateResource = async (values) => {
+    if (isEditMode && editingResource) {
+      await axios.put(`http://localhost:5000/api/resources/${editingResource.id}`, values);
+    } else {
+      await axios.post("http://localhost:5000/api/resources", values);
+    }
     const formattedValues = {
       ...values,
       resource_acq_date: values.resource_acq_date.format("YYYY-MM-DD"),
@@ -55,25 +60,27 @@ const ResourceTable = () => {
       setData([...data, newResource]);
       message.success("Resource added successfully!");
     }
-
+    fetchResources();
     setIsModalVisible(false);
     form.resetFields();
+    setIsEditMode(false);
     setEditingResource(null);
   };
 
-  const handleDelete = (key) => {
-    setData(data.filter((item) => item.key !== key));
-    message.success("Resource deleted successfully");
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost:5000/api/resources/${id}`);
+    fetchResources();
   };
 
   const handleEdit = (resource) => {
     setEditingResource(resource);
+    setIsEditMode(true);
+    setIsModelVisible(true);
     form.setFieldsValue({
       ...resource,
       resource_acq_date: moment(resource.resource_acq_date),
       resource_ret_date: moment(resource.resource_ret_date),
     });
-    setIsModalVisible(true);
   };
 
   const Resourcecolumns = [
