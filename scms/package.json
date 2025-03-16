@@ -12,8 +12,12 @@
   "dependencies": {
     "antd": "^5.24.2",
     "axios": "^1.8.3",
+<<<<<<< HEAD
+    "dayjs": "^1.11.13",
+=======
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
+>>>>>>> ddbcf091640c70d7061dc96ded5b7d6d77f9deb6
     "lucide-react": "^0.475.0",
     "moment": "^2.30.1",
     "navigate": "^0.3.6",
