@@ -19,8 +19,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 connectDB();
 
+
 app.use("/api/login", require("./routes/loginRoute.js"));
 app.use("/api/users", require("./routes/userRoutes.js"));
+app.use("/api/events", require("./routes/eventRoutes.js"));
 
 app.get('/', (req, res) => {
     res.send('API is running...');
