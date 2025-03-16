@@ -4,6 +4,7 @@ const connectDB = require('./db');
 const Login_details = require('./models/Login_details.js');
 const EventModel = require('./models/Event.js');
 const UserModel = require('./models/Users.js');
+const ResourceModel = require('./models/resource.js');
 const cors = require('cors');
 
 const app = express();

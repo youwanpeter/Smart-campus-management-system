@@ -22,7 +22,7 @@ const LoginForm = ({ onLogin }) => {
         localStorage.setItem("authToken", data.token);
         onLogin(data.token);
         message.success(data.message);
-        navigate("/");
+        window.location.href = "/";
       } else {
         message.error(data.message);
       }
@@ -48,5 +48,4 @@ const LoginForm = ({ onLogin }) => {
     </Form>
   );
 };
-
 export default LoginForm;
