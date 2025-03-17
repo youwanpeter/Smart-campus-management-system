@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Resource = require("../models/resource.js");
 
-//Generate ID with 01, 02, 03 precedence
+//Generate ID with 01, 02, 03 precedence format
 const generateId = async () => {
   const resources = await Resource.find().sort({ id: 1 });
   let newId = resources.length > 0 ? parseInt(resources[resources.length - 1].id) + 1 : 1;
