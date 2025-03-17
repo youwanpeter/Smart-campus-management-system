@@ -12,7 +12,6 @@ import {
   Popconfirm,
 } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { FaCreativeCommonsNcJp } from "react-icons/fa6";
 
 const ResourceTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -177,29 +176,28 @@ const ResourceTable = () => {
           >
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item
-            name="resource_person"
-            label="Acquired By"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="acquired_person" label="Acquired By" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item
-            name="resource_dep"
-            label="Department"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="resource_dep" label="Department" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item
-            name="resource_purpose"
-            label="Purpose"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="resource_purpose" label="Purpose" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
           <Form.Item name="resource_remarks" label="Remarks">
             <Input />
+          </Form.Item>
+          <Form.Item name="resource_status" label="Return Status" rules={[{ required: true }]}>
+            <Select>
+              <Option value="Borrowed">Borrowed</Option>
+              <Option value="Returned">Returned</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {isEditMode ? "Update" : "Add"}
+            </Button>
           </Form.Item>
         </Form>
       </Modal>
