@@ -1,17 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import {
-  Table as AntTable,
-  Button,
-  Modal,
-  Form,
-  Input,
-  DatePicker,
-  message,
-  Popconfirm,
-} from "antd";
+import { Table, Button, Modal, Form, Input, DatePicker, Select, message, Popconfirm } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+
+const { Option } = Select;
 
 const ResourceTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -21,49 +14,39 @@ const ResourceTable = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-      fetchResources();
-    }, []);
-  
-    const fetchResources = async () => {
-      const response = await axios.get("http://localhost:5000/api/resources");
-      setData(response.data);
-    };
+    fetchResources();
+  }, []);
+
+  const fetchResources = async () => {
+    const response = await axios.get("http://localhost:5000/api/resources");
+    setData(response.data);
+  };
 
   const handleAddOrUpdateResource = async (values) => {
-    if (isEditMode && editingResource) {
-      await axios.put(`http://localhost:5000/api/resources/${editingResource.id}`, values);
-    } else {
-      await axios.post("http://localhost:5000/api/resources", values);
-    }
+    console.log("Form values:", values); 
     const formattedValues = {
       ...values,
-      resource_acq_date: values.resource_acq_date.format("YYYY-MM-DD"),
-      resource_ret_date: values.resource_ret_date.format("YYYY-MM-DD"),
+      acquired_date: values.acquired_date.format("YYYY-MM-DD"),
+      return_date: values.return_date.format("YYYY-MM-DD"),
     };
 
-    if (editingResource) {
-      setData(
-        data.map((item) =>
-          item.key === editingResource.key
-            ? { ...item, ...formattedValues }
-            : item
-        )
-      );
-      message.success("Resource updated successfully!");
-    } else {
-      const newResource = {
-        ...formattedValues,
-        key: Date.now().toString(),
-        resource_status: "Borrowed",
-      };
-      setData([...data, newResource]);
-      message.success("Resource added successfully!");
+    try {
+      if (isEditMode && editingResource) {
+        await axios.put(`http://localhost:5000/api/resources/${editingResource.id}`, formattedValues);
+        message.success("Resource updated successfully!");
+      } else {
+        await axios.post("http://localhost:5000/api/resources", formattedValues);
+        message.success("Resource added successfully!");
+      }
+      fetchResources(); 
+      setIsModalVisible(false); 
+      form.resetFields(); 
+      setIsEditMode(false); 
+      setEditingResource(null); 
+    } catch (error) {
+      message.error("Error adding/updating resource.");
+      console.error(error);
     }
-    fetchResources();
-    setIsModalVisible(false);
-    form.resetFields();
-    setIsEditMode(false);
-    setEditingResource(null);
   };
 
   const handleDelete = async (id) => {
@@ -74,45 +57,31 @@ const ResourceTable = () => {
   const handleEdit = (resource) => {
     setEditingResource(resource);
     setIsEditMode(true);
-    setIsModelVisible(true);
+    setIsModalVisible(true);
     form.setFieldsValue({
       ...resource,
-      resource_acq_date: moment(resource.resource_acq_date),
-      resource_ret_date: moment(resource.resource_ret_date),
+      acquired_date: moment(resource.acquired_date),
+      return_date: moment(resource.return_date),
     });
   };
 
-  const Resourcecolumns = [
-    { title: "Resource ID", dataIndex: "key", key: "key" },
-    { title: "Resource Name", dataIndex: "resource_name", key: "Name" },
-    {
-      title: "Acquired Date",
-      dataIndex: "resource_acq_date",
-      key: "Acquired data",
-    },
-    {
-      title: "Return Date",
-      dataIndex: "resource_ret_date",
-      key: "Returned date",
-    },
-    { title: "Acquired By", dataIndex: "resource_person", key: "Acquired by" },
-    { title: "Department", dataIndex: "resource_dep", key: "Department" },
-    { title: "Purpose", dataIndex: "resource_purpose", key: "Purpose" },
-    { title: "Remarks", dataIndex: "resource_remarks", key: "Remarks" },
+  const columns = [
+    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Hall No.", dataIndex: "resource_name", key: "resource_name" },
+    { title: "Acquired Date", dataIndex: "acquired_date", key: "acquired_date" },
+    { title: "Return Date", dataIndex: "return_date", key: "return_date" },
+    { title: "Acquired By", dataIndex: "acquired_person", key: "acquired_person" },
+    { title: "Department", dataIndex: "resource_dep", key: "resource_dep" },
+    { title: "Purpose", dataIndex: "resource_purpose", key: "resource_purpose" },
+    { title: "Return Status", dataIndex: "resource_status", key: "resource_status" },
+    { title: "Remarks", dataIndex: "resource_remarks", key: "resource_remarks" },
     {
       title: "Actions",
       key: "actions",
       render: (_, resource) => (
         <div>
-          <Button
-            type="link"
-            icon={<EditOutlined />}
-            onClick={() => handleEdit(resource)}
-          />
-          <Popconfirm
-            title="Delete this resource?"
-            onConfirm={() => handleDelete(resource.key)}
-          >
+          <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(resource)} />
+          <Popconfirm title="Delete this resource?" onConfirm={() => handleDelete(resource.id)}>
             <Button type="link" icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
@@ -135,45 +104,26 @@ const ResourceTable = () => {
         Add Resource
       </Button>
 
-      <AntTable columns={Resourcecolumns} dataSource={data} rowKey="key" />
+      <Table columns={columns} dataSource={data} rowKey="id" />
 
       <Modal
         title={editingResource ? "Edit Resource" : "Add Resource"}
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
-        footer={[
-          <Button key="cancel" onClick={() => setIsModalVisible(false)}>
-            Cancel
-          </Button>,
-          <Button key="submit" type="primary" onClick={() => form.submit()}>
-            {editingResource ? "Update" : "Submit"}
-          </Button>,
-        ]}
+        footer={null}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleAddOrUpdateResource}
-        >
-          <Form.Item
-            name="resource_name"
-            label="Resource Name"
-            rules={[{ required: true }]}
-          >
-            <Input />
+        <Form form={form} layout="vertical" onFinish={handleAddOrUpdateResource}>
+          <Form.Item name="resource_name" label="Hall No." rules={[{ required: true }]}>
+            <Select>
+              <Option value="Hall A">Hall A</Option>
+              <Option value="Hall B">Hall B</Option>
+              <Option value="Hall C">Hall C</Option>
+            </Select>
           </Form.Item>
-          <Form.Item
-            name="resource_acq_date"
-            label="Acquired Date"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="acquired_date" label="Acquired Date" rules={[{ required: true }]}>
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item
-            name="resource_ret_date"
-            label="Return Date"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="return_date" label="Return Date" rules={[{ required: true }]}>
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
           <Form.Item name="acquired_person" label="Acquired By" rules={[{ required: true }]}>
