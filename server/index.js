@@ -2,23 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const connectDB = require('./db');
 const cors = require('cors');
-<<<<<<< HEAD
-=======
-=======
-require("dotenv").config();
-const express = require("express");
-const connectDB = require("./db");
-const Login_details = require("./models/Login_details.js");
-const EventModel = require("./models/Event.js");
-const UserModel = require("./models/Users.js");
-const ResourceModel = require("./models/resource.js");
-const cors = require("cors");
-<<<<<<< HEAD
-const path = require("path");
-=======
->>>>>>> e4549f6d828b866917ed72860adbfb36400159b0
->>>>>>> 85639035bcee47c900630ee1dba553aa4db139cb
->>>>>>> 1d173788e667e8021fb2dc4d572f53658027a468
 
 const app = express();
 app.use(express.json());

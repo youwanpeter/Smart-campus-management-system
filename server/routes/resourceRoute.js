@@ -6,7 +6,6 @@ const Users = require("../models/Users.js");
 
 //Generate ID with 01, 02, 03 precedence format
 const generateId = async () => {
-<<<<<<< HEAD
   try {
     //Only consider approved resources when generating IDs
     const resources = await Resource.find({ status: "Approved" }).sort({ id: 1 });
@@ -16,16 +15,6 @@ const generateId = async () => {
     console.error("Error generating ID:", error);
     return Math.floor(Math.random() * 1000).toString().padStart(2, "0");
   }
-=======
-  const resources = await Resource.find().sort({ id: 1 });
-<<<<<<< HEAD
-  let newId =
-    resources.length > 0 ? parseInt(resources[resources.length - 1].id) + 1 : 1;
-=======
-  let newId = resources.length > 0 ? parseInt(resources[resources.length - 1].id) + 1 : 1;
->>>>>>> 85639035bcee47c900630ee1dba553aa4db139cb
-  return newId.toString().padStart(2, "0");
->>>>>>> 1d173788e667e8021fb2dc4d572f53658027a468
 };
 
 //Get all resources
@@ -40,7 +29,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 //Get all pending reviews
 router.get("/pending", async (req, res) => {
   try {
@@ -84,87 +72,9 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "Error adding resource" });
   }
 });
-=======
-//Add resource
-router.post("/", async (req, res) => {
-<<<<<<< HEAD
-  try {
-    const {
-      resource_name,
-      acquired_date,
-      return_date,
-      acquired_person,
-      resource_dep,
-      resource_purpose,
-      resource_status,
-      resource_remarks,
-    } = req.body;
-
-    const acqDate = new Date(acquired_date);
-    const retDate = new Date(return_date);
-    const id = await generateId();
-
-    const newResource = new Resource({
-      id,
-      resource_name,
-      acquired_date: acqDate,
-      return_date: retDate,
-      acquired_person,
-      resource_dep,
-      resource_purpose,
-      resource_status,
-      resource_remarks,
-    });
-
-    await newResource.save();
-    res.status(201).json(newResource);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error adding resource" });
-  }
-});
-=======
-    try {
-      const { 
-        resource_name, 
-        acquired_date, 
-        return_date, 
-        acquired_person, 
-        resource_dep, 
-        resource_purpose, 
-        resource_status, 
-        resource_remarks 
-      } = req.body;
-  
-      const acqDate = new Date(acquired_date);  
-      const retDate = new Date(return_date); 
-      const id = await generateId();
-  
-      const newResource = new Resource({
-        id,
-        resource_name,             
-        acquired_date: acqDate,
-        return_date: retDate, 
-        acquired_person,
-        resource_dep,              
-        resource_purpose,         
-        resource_status,          
-        resource_remarks         
-      });
-  
-      await newResource.save();
-      res.status(201).json(newResource); 
-    } catch (error) {
-      console.error(error);  
-      res.status(500).json({ message: "Error adding resource" });
-    }
-  });
->>>>>>> 85639035bcee47c900630ee1dba553aa4db139cb
->>>>>>> 1d173788e667e8021fb2dc4d572f53658027a468
 
 router.put("/:id", async (req, res) => {
   try {
-<<<<<<< HEAD
     console.log(`Updating resource with ID: ${req.params.id}`);
     const updatedResource = await Resource.findOneAndUpdate(
       { id: req.params.id },
@@ -178,17 +88,6 @@ router.put("/:id", async (req, res) => {
     }
 
     console.log(`Resource updated successfully with ID: ${req.params.id}`);
-=======
-<<<<<<< HEAD
-    const updatedResource = await Resource.findOneAndUpdate(
-      { id: req.params.id },
-      req.body,
-      { new: true }
-    );
-=======
-    const updatedResource = await Resource.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
->>>>>>> 85639035bcee47c900630ee1dba553aa4db139cb
->>>>>>> 1d173788e667e8021fb2dc4d572f53658027a468
     res.json(updatedResource);
   } catch (error) {
     console.error("Error updating resource:", error);
