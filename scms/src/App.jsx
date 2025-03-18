@@ -26,13 +26,15 @@ const App = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  // Check authentication on mount and whenever auth state changes
+  const [userRole, setUserRole] = useState(null);
+  //Check authentication on mount and whenever auth state changes
   useEffect(() => {
     checkAuth();
     setLoading(false);
   }, []);
 
-  // Function to check if token exists and is valid
+
+  //Function to check if token exists and is valid
   const checkAuth = () => {
     const token = localStorage.getItem("authToken");
 
@@ -43,6 +45,7 @@ const App = () => {
 
         if (decoded.exp > currentTime) {
           setIsAuthenticated(true);
+          setUserRole(decoded.role);
         } else {
           localStorage.removeItem("authToken");
           setIsAuthenticated(false);
@@ -59,8 +62,7 @@ const App = () => {
   const handleLogin = (token) => {
     localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
-    // Force a re-render to trigger the redirect
-    window.location.href = "/*";
+    window.location.href = "/";
   };
 
   const handleLogout = () => {
@@ -72,8 +74,7 @@ const App = () => {
   const AuthenticatedLayout = () => (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider theme="light" trigger={null} collapsible className="sider">
-        <Sidebar />
-        <Button
+        <Sidebar userRole={userRole} />        <Button
           type="text"
           icon={<MenuUnfoldOutlined />}
           onClick={handleLogout}
@@ -97,14 +98,21 @@ const App = () => {
             <Col span={24}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/users" element={<Users />} />
+                {userRole !== "Lecturer" && userRole !== "Student" && (
+                  <Route path="/users" element={<Users />} />
+                )}
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/events" element={<Events />} />
-                <Route path="/resource" element={<Resource />} />
+                {userRole !== "Student" && (
+                  <Route path="/resource" element={<Resource />} />
+                )}                
                 <Route path="/communication" element={<Communication />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/logout" element={<Logout />} />
+
+                <Route path="/users" element={<Navigate to="/" replace />} />
+                <Route path="/resource" element={<Navigate to="/" replace />} />
               </Routes>
             </Col>
           </Row>
@@ -120,8 +128,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={ <Login onLogin={handleLogin} />
-        } />
+        <Route path="/login" element={
+          isAuthenticated ? <Navigate to="/" replace /> : <Login onLogin={handleLogin} />
+        }
+        />
         <Route path="/*" element={
           isAuthenticated ? <AuthenticatedLayout /> : <Navigate to="/login" replace />
         } />
