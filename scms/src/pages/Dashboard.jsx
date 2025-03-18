@@ -70,7 +70,7 @@ const Dashboard = () => {
               </Col>
               <Col
                 style={{
-                  marginLeft: "100px",
+                  marginLeft: "90px",
                   fontSize: "20px",
                   marginTop: "-5px",
                 }}
