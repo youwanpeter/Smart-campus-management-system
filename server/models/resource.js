@@ -8,6 +8,7 @@ const ResourceSchema = new mongoose.Schema({
   acquired_person: { type: String, required: true },
   resource_dep: { type: String, required: true },
   resource_purpose: { type: String, required: true },
+  resource_status: { type: String, required: true },
   resource_remarks: { type: String, required: true },
 });
 

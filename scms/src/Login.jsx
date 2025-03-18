@@ -21,7 +21,6 @@ const Login = () => {
       <div className="form-content">
         <FaLeaf className="logo-icon" />
         <h2>Login</h2>
-        <p>Welcome! Please enter your credentials below.</p>
         {token ? (
         <div>Welcome, you're logged in!</div>
       ) : (

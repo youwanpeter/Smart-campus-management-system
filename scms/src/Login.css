@@ -67,8 +67,28 @@ h2 {
   font-size: 30px;
 }
 
+.login-form-button{
+  height: 40px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: center !important; 
+}
+
 .logo-icon {
+  margin-top: 20px;
   color: #4f6f52;
-  font-size: 80px;
-  margin-bottom: 15px;
+  font-size: 100px; 
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 2px rgba(79, 111, 82, 0.8)); 
+}
+
+.resend{
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  margin-top: 45px;
+}
+
+a{
+  cursor: pointer;
 }
