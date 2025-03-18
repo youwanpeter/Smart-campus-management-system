@@ -6,6 +6,7 @@ const EventModel = require("./models/Event.js");
 const UserModel = require("./models/Users.js");
 const ResourceModel = require("./models/resource.js");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 app.use(express.json());
