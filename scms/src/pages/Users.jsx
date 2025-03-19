@@ -23,7 +23,10 @@ const Users = () => {
 
   const handleAddUser = async (values) => {
     if (isEditMode && editingUser) {
-      await axios.put(`http://localhost:5000/api/users/${editingUser.id}`, values);
+      await axios.put(
+        `http://localhost:5000/api/users/${editingUser.id}`,
+        values
+      );
     } else {
       await axios.post("http://localhost:5000/api/users", values);
     }
@@ -59,8 +62,17 @@ const Users = () => {
       key: "actions",
       render: (_, record) => (
         <>
-          <Button icon={<EditOutlined />} onClick={() => handleEditUser(record)} style={{ marginRight: 8 }} />
-          <Popconfirm title="Delete this user?" onConfirm={() => handleDeleteUser(record.id)} okText="Yes" cancelText="No">
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => handleEditUser(record)}
+            style={{ marginRight: 8 }}
+          />
+          <Popconfirm
+            title="Delete this user?"
+            onConfirm={() => handleDeleteUser(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
             <Button danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </>
@@ -70,19 +82,65 @@ const Users = () => {
 
   return (
     <div>
-      <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalOpen(true)}>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={() => setIsModalOpen(true)}
+      >
         Add User
       </Button>
-      <Table columns={columns} dataSource={users} rowKey="id" style={{ marginTop: 20 }} />
-      <Modal title={isEditMode ? "Edit User" : "Add User"} open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
+      <Table
+        columns={columns}
+        dataSource={users}
+        rowKey="id"
+        style={{ marginTop: 20 }}
+      />
+      <Modal
+        title={isEditMode ? "Edit User" : "Add User"}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={null}
+      >
         <Form form={form} layout="vertical" onFinish={handleAddUser}>
-          <Form.Item name="name" label="Name" rules={[{ required: true }]}><Input /></Form.Item>
-          <Form.Item name="role" label="Role" rules={[{ required: true }]}><Select><Option value="Admin">Admin</Option><Option value="Lecturer">Lecturer</Option><Option value="Student">Student</Option></Select></Form.Item>
-          <Form.Item name="email" label="Email" rules={[{ required: true, type: "email" }]}><Input /></Form.Item>
-          <Form.Item name="phone" label="Phone" rules={[{ required: true }]}><Input /></Form.Item>
-          <Form.Item name="username" label="Username" rules={[{ required: true }]}><Input /></Form.Item>
-          <Form.Item name="password" label="Password" rules={[{ required: true }]}><Input /></Form.Item>
-          <Form.Item><Button type="primary" htmlType="submit">{isEditMode ? "Update" : "Add"}</Button></Form.Item>
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="role" label="Role" rules={[{ required: true }]}>
+            <Select>
+              <Option value="Admin">Admin</Option>
+              <Option value="Lecturer">Lecturer</Option>
+              <Option value="Student">Student</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[{ required: true, type: "email" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item name="phone" label="Phone" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="username"
+            label="Username"
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {isEditMode ? "Update" : "Add"}
+            </Button>
+          </Form.Item>
         </Form>
       </Modal>
     </div>

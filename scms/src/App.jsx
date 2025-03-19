@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  Navigate,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
 import { Button, Layout, Row, Col, theme } from "antd";
 import Sidebar from "./components/Sidebar";
 import CustomHeader from "./components/CustomHeader";
@@ -8,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Schedule from "./pages/Schedule";
 import Events from "./pages/Events";
+import Previewevent from "./pages/Previewevent";
 import Resource from "./pages/Resource";
 import Communication from "./pages/Communication";
 import Reports from "./pages/Reports";
@@ -26,13 +32,14 @@ const App = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  // Check authentication on mount and whenever auth state changes
+  const [userRole, setUserRole] = useState(null);
+  //Check authentication on mount and whenever auth state changes
   useEffect(() => {
     checkAuth();
     setLoading(false);
   }, []);
 
-  // Function to check if token exists and is valid
+  //Function to check if token exists and is valid
   const checkAuth = () => {
     const token = localStorage.getItem("authToken");
 
@@ -43,6 +50,7 @@ const App = () => {
 
         if (decoded.exp > currentTime) {
           setIsAuthenticated(true);
+          setUserRole(decoded.role);
         } else {
           localStorage.removeItem("authToken");
           setIsAuthenticated(false);
@@ -59,8 +67,7 @@ const App = () => {
   const handleLogin = (token) => {
     localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
-    // Force a re-render to trigger the redirect
-    window.location.href = "/*";
+    window.location.href = "/";
   };
 
   const handleLogout = () => {
@@ -81,7 +88,7 @@ const App = () => {
   const AuthenticatedLayout = () => (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider theme="light" trigger={null} collapsible className="sider">
-        <Sidebar />
+        <Sidebar userRole={userRole} />{" "}
         <Button
           type="text"
           icon={<MenuUnfoldOutlined />}
@@ -95,25 +102,42 @@ const App = () => {
           <CustomHeader />
         </Header>
 
-        <Content className="content" style={{
-          margin: "24px 16px",
-          padding: 24,
-          minHeight: 280,
-          background: colorBgContainer,
-          borderRadius: borderRadiusLG,
-        }}>
+        <Content
+          className="content"
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/users" element={<Users />} />
+                {userRole !== "Lecturer" && userRole !== "Student" && (
+                  <Route path="/users" element={<Users />} />
+                )}
                 <Route path="/schedule" element={<Schedule />} />
-                <Route path="/events" element={<Events />} />
-                <Route path="/resource" element={<Resource />} />
+                {userRole !== "Lecturer" && userRole !== "Student" && (
+                  <Route path="/events" element={<Events />} />
+                )}
+
+                {userRole !== "Student" && (
+                  <Route path="/resource" element={<Resource />} />
+                )}
+                {userRole !== "Admin" && (
+                  <Route path="/previewevent" element={<Previewevent />} />
+                )}
+
                 <Route path="/communication" element={<Communication />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/logout" element={<Logout />} />
+
+                <Route path="/users" element={<Navigate to="/" replace />} />
+                <Route path="/resource" element={<Navigate to="/" replace />} />
               </Routes>
             </Col>
           </Row>
@@ -129,11 +153,26 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={ <Login onLogin={handleLogin} />
-        } />
-        <Route path="/*" element={
-          isAuthenticated ? <AuthenticatedLayout /> : <Navigate to="/login" replace />
-        } />
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/" replace />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        />
+        <Route
+          path="/*"
+          element={
+            isAuthenticated ? (
+              <AuthenticatedLayout />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
       </Routes>
     </Router>
   );

@@ -1,16 +1,33 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const ResourceSchema = new mongoose.Schema({
-  id: { type: String, unique: true, required: true }, 
-  resource_name: { type: String, required: true },
-  acquired_date: { type: Date, required: true }, 
-  return_date: { type: Date, required: true }, 
-  acquired_person: { type: String, required: true },
-  resource_dep: { type: String, required: true },
-  resource_purpose: { type: String, required: true },
-  resource_remarks: { type: String, required: true },
+const resourceSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  resource_name: String,
+  acquired_date: String,
+  return_date: String,
+  acquired_person: String,
+  resource_dep: String,
+  resource_purpose: String,
+  resource_status: String,
+  resource_remarks: String,
+  status: {
+    type: String,
+    enum: ["Pending", "Approved"],
+    default: "Approved",
+  },
+  requested_by: {
+    type: String,
+  },
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-const ResourceModel = mongoose.model("Resource", ResourceSchema);
+const Resource = mongoose.model("Resource", resourceSchema);
 
-module.exports = ResourceModel;
+module.exports = Resource;

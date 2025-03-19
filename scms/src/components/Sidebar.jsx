@@ -1,7 +1,7 @@
 import { Flex, Menu } from "antd";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaLeaf } from "react-icons/fa6"; // ✅ Import the logo icon
+import { FaLeaf } from "react-icons/fa6";
 import {
   UserOutlined,
   FileTextOutlined,
@@ -14,7 +14,7 @@ import {
   WechatOutlined,
 } from "@ant-design/icons";
 
-const Sidebar = () => {
+const Sidebar = ({ userRole }) => {
   const location = useLocation();
 
   const menuItems = [
@@ -23,26 +23,50 @@ const Sidebar = () => {
       icon: <DashboardOutlined />,
       label: <Link to="/">Dashboard</Link>,
     },
-    {
-      key: "/users",
-      icon: <UserOutlined />,
-      label: <Link to="/users">Users</Link>,
-    },
+    ...(userRole !== "Lecturer" && userRole !== "Student"
+      ? [
+          {
+            key: "/users",
+            icon: <UserOutlined />,
+            label: <Link to="/users">Users</Link>,
+          },
+        ]
+      : []),
     {
       key: "/schedule",
       icon: <ScheduleOutlined />,
       label: <Link to="/schedule">Schedule</Link>,
     },
-    {
-      key: "/events",
-      icon: <NotificationOutlined />,
-      label: <Link to="/events">Events</Link>,
-    },
-    {
-      key: "/resource",
-      icon: <BookOutlined />,
-      label: <Link to="/resource">Resource</Link>,
-    },
+    ...(userRole !== "Lecturer" && userRole !== "Student"
+      ? [
+          {
+            key: "/events",
+            icon: <UserOutlined />,
+            label: <Link to="/events">Events</Link>,
+          },
+        ]
+      : []),
+
+    ...(userRole !== "Student"
+      ? [
+          {
+            key: "/resource",
+            icon: <BookOutlined />,
+            label: <Link to="/resource">Resource</Link>,
+          },
+        ]
+      : []),
+
+    ...(userRole !== "Admin"
+      ? [
+          {
+            key: "/previewevent",
+            icon: <BookOutlined />,
+            label: <Link to="/previewevent">Events</Link>,
+          },
+        ]
+      : []),
+
     {
       key: "/communication",
       icon: <WechatOutlined />,

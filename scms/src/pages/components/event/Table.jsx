@@ -11,26 +11,49 @@ import {
   Popconfirm,
   Upload,
 } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  UploadOutlined,
+  PictureOutlined,
+} from "@ant-design/icons";
 import axios from "axios";
 import dayjs from "dayjs";
+
+// Base URL for the API
+const API_BASE_URL = "http://localhost:5000";
 
 const Table = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingEvent, setEditingEvent] = useState(null);
-  const [data, setData] = useState([]); // Data fetched from API
-  const [image, setImage] = useState(null); // State for image upload
+  const [data, setData] = useState([]);
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch events data from the backend when the component mounts
-  useEffect(() => {
+  // Fetch event data on component mount
+  const fetchEvents = () => {
+    setLoading(true);
     axios
-      .get("http://localhost:5000/api/events/all")
-      .then((response) => setData(response.data))
-      .catch((error) => console.error("Error fetching events:", error));
+      .get(`${API_BASE_URL}/api/events/all`)
+      .then((response) => {
+        console.log("Fetched events:", response.data);
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+        message.error("Failed to fetch events.");
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchEvents();
   }, []);
 
+  // Table columns definition
   const columns = [
     {
       title: "Event ID",
@@ -46,11 +69,13 @@ const Table = () => {
       title: "Event Description",
       dataIndex: "event_description",
       key: "event_description",
+      ellipsis: true,
     },
     {
       title: "Event Date",
       dataIndex: "event_date",
       key: "event_date",
+      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD HH:mm") : "N/A"),
     },
     {
       title: "Event Location",
@@ -62,29 +87,53 @@ const Table = () => {
       dataIndex: "organizer_name",
       key: "organizer_name",
     },
-    {
-      title: "Created At",
-      dataIndex: "created_at",
-      key: "created_at",
-    },
-    {
-      title: "Updated At",
-      dataIndex: "updated_at",
-      key: "updated_at",
-    },
+    // Replace the event_image render function in your columns definition
     {
       title: "Event Image",
       key: "event_image",
-      render: (text, record) =>
-        record.event_image ? (
-          <img
-            src={record.event_image}
-            alt="Event"
-            style={{ width: 50, height: 50, objectFit: "cover" }}
-          />
-        ) : (
-          <span>No Image</span>
-        ),
+      render: (text, record) => {
+        return (
+          <div
+            style={{
+              width: 50,
+              height: 50,
+              backgroundColor: "#f0f0f0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "12px",
+              color: "#666",
+              border: "1px solid #d9d9d9",
+              borderRadius: "2px",
+              overflow: "hidden", // Add this to contain the image
+            }}
+          >
+            {record.event_image ? (
+              <img
+                src={getImageUrl(record.event_image)}
+                alt="Event"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+                onError={(e) => {
+                  // Replace with text without using innerText
+                  const container = e.target.parentNode;
+                  e.target.style.display = "none";
+                  // Create and append text node
+                  const textNode = document.createTextNode("No Image");
+                  if (container && !container.contains(textNode)) {
+                    container.appendChild(textNode);
+                  }
+                }}
+              />
+            ) : (
+              "No Image"
+            )}
+          </div>
+        );
+      },
     },
     {
       title: "Status",
@@ -92,7 +141,7 @@ const Table = () => {
       key: "status",
       render: (text, record) => (
         <Select
-          defaultValue={text}
+          defaultValue={text || "Pending"}
           style={{ width: 120 }}
           onChange={(value) => handleStatusChange(value, record.event_id)}
         >
@@ -118,19 +167,34 @@ const Table = () => {
             okText="Yes"
             cancelText="No"
           >
-            <Button type="link" icon={<DeleteOutlined />} />
+            <Button type="link" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       ),
     },
   ];
 
+  // Function to get the complete image URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+
+    // If the image path is already a full URL, return it
+    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+      return imagePath;
+    }
+
+    // Otherwise, append the base URL
+    return `${API_BASE_URL}/${imagePath.replace(/^\//, "")}`;
+  };
+
+  // Handle status change
   const handleStatusChange = (value, event_id) => {
     axios
-      .put(`http://localhost:5000/api/events/update/${event_id}`, {
+      .put(`${API_BASE_URL}/api/events/update/${event_id}`, {
         status: value,
       })
       .then((response) => {
+        console.log("Status update response:", response.data);
         const updatedData = data.map((item) =>
           item.event_id === event_id ? { ...item, status: value } : item
         );
@@ -143,119 +207,222 @@ const Table = () => {
       });
   };
 
+  // Edit event handler
   const handleEdit = (event) => {
+    console.log("Editing event:", event);
     setEditingEvent(event);
-    form.setFieldsValue(event);
-    setImage(event.event_image); // Set image when editing
+    form.setFieldsValue({
+      event_name: event.event_name,
+      event_description: event.event_description,
+      event_date: event.event_date ? dayjs(event.event_date) : null,
+      event_location: event.event_location,
+      organizer_name: event.organizer_name,
+    });
+
+    // If event has an image, we need to handle it differently
+    // We can't set the File object, but we can store the path
+    if (event.event_image) {
+      setImage(event.event_image);
+    } else {
+      setImage(null);
+    }
+
     setIsModalVisible(true);
   };
 
+  // Cancel modal handler
   const handleCancel = () => {
     setIsModalVisible(false);
     setEditingEvent(null);
-    setImage(null); // Reset image state on modal close
+    setImage(null);
+    form.resetFields();
   };
 
   const handleCreateOrUpdate = () => {
     form
       .validateFields()
       .then((values) => {
-        const eventDate = values.event_date ? dayjs(values.event_date) : null;
-        if (!eventDate || !eventDate.isValid()) {
+        const eventDate = values.event_date
+          ? values.event_date.toISOString()
+          : null;
+        if (!eventDate) {
           message.error("Invalid date selected.");
           return;
         }
 
-        if (editingEvent) {
-          console.log("Updating event with ID:", editingEvent.event_id);
-          console.log("Request body:", { ...values, event_image: image });
+        const formData = new FormData();
+        formData.append("event_name", values.event_name);
+        formData.append("event_description", values.event_description);
+        formData.append("event_date", eventDate);
+        formData.append("event_location", values.event_location);
+        formData.append("organizer_name", values.organizer_name);
 
-          axios
-            .put(
-              `http://localhost:5000/api/events/update/${editingEvent.event_id}`,
-              {
-                ...values,
-                event_image: image,
-                event_date: eventDate.toISOString(), // Ensure the correct format
-              }
-            )
-            .then((response) => {
-              const updatedData = data.map((item) =>
-                item.event_id === editingEvent.event_id
-                  ? {
-                      ...item,
-                      ...values,
-                      event_image: image,
-                      event_date: eventDate,
-                    }
-                  : item
-              );
-              setData(updatedData);
-              message.success("Event updated successfully");
-            })
-            .catch((error) => {
-              console.error("Error updating event:", error);
-              message.error("Failed to update event");
-            });
-        } else {
-          const newEvent = {
-            ...values,
-            event_id: Date.now().toString(),
-            event_image: image,
-            event_date: eventDate.toISOString(), // Ensure the correct format
-          };
-          console.log("Creating new event:", newEvent);
-
-          axios
-            .post("http://localhost:5000/api/events/create", newEvent)
-            .then((response) => {
-              setData([...data, response.data]);
-              message.success("Event created successfully");
-            })
-            .catch((error) => {
-              console.error("Error creating event:", error);
-              message.error("Failed to create event");
-            });
+        // Only append image if it's a File object
+        if (image && image instanceof File) {
+          formData.append("event_image", image);
         }
 
-        setIsModalVisible(false);
-        form.resetFields();
-        setEditingEvent(null);
-        setImage(null); // Reset image state after form submission
+        const requestMethod = editingEvent ? "put" : "post";
+        const url = editingEvent
+          ? `${API_BASE_URL}/api/events/update/${editingEvent.event_id}`
+          : `${API_BASE_URL}/api/events/create`;
+
+        axios({
+          method: requestMethod,
+          url: url,
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+          .then((response) => {
+            console.log("Form submission response:", response.data);
+            message.success(
+              `Event ${editingEvent ? "updated" : "created"} successfully`
+            );
+            // Refresh the data after successful operation
+            fetchEvents();
+            setIsModalVisible(false);
+            form.resetFields();
+            setEditingEvent(null);
+            setImage(null);
+          })
+          .catch((error) => {
+            console.error("Error during request:", error);
+            if (error.response) {
+              message.error(
+                `Server Error: ${
+                  error.response.data.message || "Failed to process the request"
+                }`
+              );
+            } else {
+              message.error("Network or request error occurred.");
+            }
+          });
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
       });
   };
 
+  // Delete event handler
   const handleDelete = (event_id) => {
-    axios
-      .delete(`http://localhost:5000/api/events/delete/${event_id}`)
+    console.log("Deleting event with ID:", event_id);
+    axios({
+      method: "delete",
+      url: `${API_BASE_URL}/api/events/delete/${event_id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
-        const updatedData = data.filter((item) => item.event_id !== event_id);
-        setData(updatedData);
+        console.log("Delete response:", response.data);
         message.success("Event deleted successfully");
+        // Refresh data after deletion
+        fetchEvents();
       })
       .catch((error) => {
         console.error("Error deleting event:", error);
-        message.error("Failed to delete event");
+        message.error(`Failed to delete event: ${error.message}`);
       });
   };
 
+  // Image upload handler
   const handleImageUpload = ({ file }) => {
     if (!file) {
       message.error("No file selected!");
-      return Upload.LIST_IGNORE; // Reject file
+      return Upload.LIST_IGNORE;
     }
 
     const isImage = file.type && file.type.startsWith("image/");
     if (!isImage) {
       message.error("You can only upload image files!");
-      return Upload.LIST_IGNORE; // Reject file
+      return Upload.LIST_IGNORE;
     }
 
-    setImage(URL.createObjectURL(file)); // Set the image locally (for preview)
-    return false; // Prevent auto upload (you can implement manual upload)
+    // Set the file object for FormData
+    setImage(file);
+    return false;
+  };
+
+  // Render upload button in the modal
+  const renderUploadButton = () => {
+    return (
+      <div>
+        {image ? (
+          <div
+            style={{ position: "relative", width: "100px", height: "100px" }}
+          >
+            {typeof image === "string" ? (
+              <div
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  border: "1px dashed #d9d9d9",
+                  borderRadius: "2px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#fafafa",
+                }}
+              >
+                <img
+                  src={getImageUrl(image)}
+                  alt="Preview"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                    e.target.parentNode.innerText = "Image Error";
+                  }}
+                />
+              </div>
+            ) : (
+              <div
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  border: "1px dashed #d9d9d9",
+                  borderRadius: "2px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#fafafa",
+                }}
+              >
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="Preview"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          <div
+            style={{
+              width: "100px",
+              height: "100px",
+              border: "1px dashed #d9d9d9",
+              borderRadius: "2px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              backgroundColor: "#fafafa",
+            }}
+          >
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -263,14 +430,24 @@ const Table = () => {
       <Button
         type="primary"
         icon={<PlusOutlined />}
-        onClick={() => setIsModalVisible(true)}
+        onClick={() => {
+          form.resetFields();
+          setEditingEvent(null);
+          setImage(null);
+          setIsModalVisible(true);
+        }}
         style={{ marginBottom: 20 }}
       >
         Create Event
       </Button>
-      <AntTable columns={columns} dataSource={data} rowKey="event_id" />
+      <AntTable
+        columns={columns}
+        dataSource={data}
+        rowKey="event_id"
+        loading={loading}
+        pagination={{ pageSize: 10 }}
+      />
 
-      {/* Modal for creating or editing an event */}
       <Modal
         title={editingEvent ? "Edit Event" : "Create Event"}
         open={isModalVisible}
@@ -287,7 +464,6 @@ const Table = () => {
           >
             <Input />
           </Form.Item>
-
           <Form.Item
             name="event_description"
             label="Event Description"
@@ -295,20 +471,15 @@ const Table = () => {
               { required: true, message: "Please input event description!" },
             ]}
           >
-            <Input />
+            <Input.TextArea rows={4} />
           </Form.Item>
-
           <Form.Item
             name="event_date"
             label="Event Date"
             rules={[{ required: true, message: "Please select event date!" }]}
           >
-            <DatePicker
-              style={{ width: "100%" }}
-              value={editingEvent ? dayjs(editingEvent.event_date) : null} // ensure the date is in the correct format
-            />
+            <DatePicker showTime style={{ width: "100%" }} />
           </Form.Item>
-
           <Form.Item
             name="event_location"
             label="Event Location"
@@ -318,7 +489,6 @@ const Table = () => {
           >
             <Input />
           </Form.Item>
-
           <Form.Item
             name="organizer_name"
             label="Organizer Name"
@@ -328,23 +498,24 @@ const Table = () => {
           >
             <Input />
           </Form.Item>
-
-          {/* Image Upload Field */}
           <Form.Item label="Event Image">
             <Upload
               listType="picture-card"
               showUploadList={false}
               customRequest={handleImageUpload}
+              beforeUpload={(file) => {
+                const isImage = file.type.startsWith("image/");
+                if (!isImage) {
+                  message.error("You can only upload image files!");
+                }
+                return isImage;
+              }}
             >
-              {image ? (
-                <img src={image} alt="event" style={{ width: "100%" }} />
-              ) : (
-                <div>
-                  <UploadOutlined />
-                  <div>Upload</div>
-                </div>
-              )}
+              {renderUploadButton()}
             </Upload>
+            <div style={{ marginTop: 8, fontSize: "12px", color: "#888" }}>
+              Click to upload a new image
+            </div>
           </Form.Item>
         </Form>
       </Modal>
