@@ -1,10 +1,9 @@
-// routes/lecturers.js
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const Users = require("../models/Users"); // Assuming you have a User model
+const Users = require("../models/Users"); 
 
-// Middleware to authenticate user
+//Middleware to authenticate user
 const authenticate = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   
@@ -21,10 +20,9 @@ const authenticate = (req, res, next) => {
   }
 };
 
-// Get all lecturers
+//Get all lecturers
 router.get("/", authenticate, async (req, res) => {
   try {
-    // Assuming you have a role field in your User model
     const lecturers = await Users.find({ role: "Lecturer" }).select("name");
     res.json(lecturers);
   } catch (error) {

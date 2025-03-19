@@ -12,6 +12,7 @@ import {
   NotificationOutlined,
   BookOutlined,
   WechatOutlined,
+  FileOutlined,
 } from "@ant-design/icons";
 
 const Sidebar = ({ userRole }) => {
@@ -25,12 +26,12 @@ const Sidebar = ({ userRole }) => {
     },
     ...(userRole !== "Lecturer" && userRole !== "Student"
       ? [
-          {
-            key: "/users",
-            icon: <UserOutlined />,
-            label: <Link to="/users">Users</Link>,
-          },
-        ]
+        {
+          key: "/users",
+          icon: <UserOutlined />,
+          label: <Link to="/users">Users</Link>,
+        },
+      ]
       : []),
     {
       key: "/courses",
@@ -44,35 +45,54 @@ const Sidebar = ({ userRole }) => {
     },
     ...(userRole !== "Lecturer" && userRole !== "Student"
       ? [
-          {
-            key: "/events",
-            icon: <UserOutlined />,
-            label: <Link to="/events">Events</Link>,
-          },
-        ]
+        {
+          key: "/events",
+          icon: <UserOutlined />,
+          label: <Link to="/events">Events</Link>,
+        },
+      ]
       : []),
 
     ...(userRole !== "Student"
       ? [
-          {
-            key: "/resource",
-            icon: <BookOutlined />,
-            label: <Link to="/resource">Resource</Link>,
-          },
-        ]
+        {
+          key: "/resource",
+          icon: <BookOutlined />,
+          label: <Link to="/resource">Resource</Link>,
+        },
+      ]
       : []),
 
     ...(userRole !== "Admin"
       ? [
-          {
-            key: "/previewevent",
-            icon: <BookOutlined />,
-            label: <Link to="/previewevent">Events</Link>,
-          },
-        ]
+        {
+          key: "/previewevent",
+          icon: <BookOutlined />,
+          label: <Link to="/previewevent">Events</Link>,
+        },
+      ]
       : []),
 
+    ...(userRole !== "Admin" && userRole !== "Lecturer"
+      ? [
+        {
+          key: "/communication",
+          icon: <WechatOutlined />,
+          label: <Link to="/communication">Communication</Link>,
+        },
+      ]
+      : []),
+    ...(userRole !== "Admin" && userRole !== "Student"
+      ? [
+        {
+          key: "/student-files",
+          icon: <FileOutlined />,
+          label: <Link to="/student-files">Student Files</Link>,
+        },
+      ]
+      : []),
     {
+<<<<<<< HEAD
       key: "/communication",
       icon: <WechatOutlined />,
       label: <Link to="/communication">Communication</Link>,
@@ -86,6 +106,21 @@ const Sidebar = ({ userRole }) => {
       key: "/subjects",
       icon: <ScheduleOutlined />,
       label: <Link to="/subjects">Subjects</Link>,
+=======
+      key: "/subjects",
+      icon: <ScheduleOutlined />,
+      label: <Link to="/subjects">Subjects</Link>,
+    },
+    {
+      key: "/reports",
+      icon: <FileTextOutlined />,
+      label: <Link to="/reports">Reports</Link>,
+    },
+    {
+      key: "/settings",
+      icon: <SettingOutlined />,
+      label: <Link to="/settings">Settings</Link>,
+>>>>>>> 13b0c815956a74c6db89e1ee316c4f866ec7f422
     },
     {
       key: "/logout",

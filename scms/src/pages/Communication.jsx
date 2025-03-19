@@ -26,9 +26,13 @@ const Communication = () => {
 
   const fetchStudentFiles = async (name) => {
     try {
-      const response = await axios.get(`/api/files/student/${name}`);
+      const token = localStorage.getItem("authToken");
+      const response = await axios.get(`/api/files/student/${name}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setUploadedFiles(response.data);
     } catch (err) {
+      console.error("Error fetching student files:", err);
       setError("Failed to load your files. Please try again later.");
     }
   };
@@ -75,8 +79,37 @@ const Communication = () => {
     { title: "Filename", dataIndex: "filename", key: "filename" },
     { title: "Sent to", dataIndex: "lecturerName", key: "lecturerName" },
     { title: "Date", dataIndex: "createdAt", key: "createdAt", render: (text) => new Date(text).toLocaleDateString() },
-    { title: "Action", key: "action", render: (text, record) => <a href={`/api/files/download/${record._id}`}>Download</a> },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <a href={`/api/files/download/${record._id}`} onClick={(e) => handleDownload(e, record._id)}>Download</a>
+      )
+    }
   ];
+
+  const handleDownload = async (e, fileId) => {
+    e.preventDefault();
+    const token = localStorage.getItem("authToken");
+
+    try {
+      const response = await axios.get(`/api/files/download/${fileId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: "blob", 
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", response.headers["content-disposition"]?.split("filename=")[1] || "file");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error("Download failed:", err);
+      setError("Failed to download file. Please try again.");
+    }
+  };
 
   return (
     <div style={{ padding: "20px" }}>
