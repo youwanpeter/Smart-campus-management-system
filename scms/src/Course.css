@@ -1,0 +1,56 @@
+.course-wizard {
+  padding: 20px;
+}
+
+.wizard-card {
+  margin-bottom: 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.wizard-steps {
+  margin-bottom: 32px;
+}
+
+.steps-content {
+  margin-top: 16px;
+  padding: 20px;
+  background-color: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+}
+
+.steps-action {
+  margin-top: 24px;
+  text-align: right;
+}
+
+/* Form styles */
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+/* Table styles */
+.ant-table-wrapper {
+  margin-top: 16px;
+}
+
+/* Review form styles */
+.review-form .ant-card {
+  margin-bottom: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .course-wizard {
+    padding: 10px;
+  }
+
+  .steps-content {
+    padding: 15px;
+  }
+
+  .ant-descriptions-item-label,
+  .ant-descriptions-item-content {
+    padding: 8px 12px;
+  }
+}

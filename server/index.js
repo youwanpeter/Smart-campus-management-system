@@ -39,8 +39,14 @@ app.use("/api/login", require("./routes/loginRoute.js"));
 app.use("/api/users", require("./routes/userRoutes.js"));
 app.use("/api/events", require("./routes/eventRoutes.js"));
 
+<<<<<<< HEAD
 app.use("/api/files", require("./routes/files"));
 app.use("/api/lecturers", require("./routes/lecturers"));
+=======
+app.use("/api/courses", require("./routes/courseRoute.js"));
+app.use("/api/subjects", require("./routes/subjectsRoute.js"));
+
+>>>>>>> 95badcbf697fcf5afb356e81b5aa13f94aba95ec
 
 app.get("/", (req, res) => {
   res.send("API is running...");

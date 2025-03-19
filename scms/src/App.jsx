@@ -23,6 +23,9 @@ import Logout from "./pages/Logout";
 import Login from "./Login";
 import { jwtDecode } from "jwt-decode";
 import "./App.css";
+import CourseList from "./pages/Courses/CourseList.jsx";
+import Subjects from "./pages/Subjects";
+import CreateCourse from "./pages/Courses/CreateCourse.jsx";
 
 const { Sider, Header, Content } = Layout;
 
@@ -132,6 +135,9 @@ const App = () => {
                   <Route path="/previewevent" element={<Previewevent />} />
                 )}
 
+                  <Route path="/courses" element={<CourseList />} />
+                  <Route path="/courses/create" element={<CreateCourse />} />
+                  <Route path="/subjects" element={<Subjects />} />
                 <Route path="/communication" element={<Communication />} />
                 <Route path="/files" element={<LecturerView />} />
                 <Route path="/reports" element={<Reports />} />

@@ -33,6 +33,11 @@ const Sidebar = ({ userRole }) => {
         ]
       : []),
     {
+      key: "/courses",
+      icon: <ScheduleOutlined />,
+      label: <Link to="/courses">Courses</Link>,
+    },
+    {
       key: "/schedule",
       icon: <ScheduleOutlined />,
       label: <Link to="/schedule">Schedule</Link>,
@@ -73,9 +78,15 @@ const Sidebar = ({ userRole }) => {
       label: <Link to="/communication">Communication</Link>,
     },
     {
+<<<<<<< HEAD
       key: "/files",
       icon: <WechatOutlined />,
       label: <Link to="/files">File</Link>,
+=======
+      key: "/subjects",
+      icon: <ScheduleOutlined />,
+      label: <Link to="/subjects">Subjects</Link>,
+>>>>>>> 95badcbf697fcf5afb356e81b5aa13f94aba95ec
     },
     {
       key: "/reports",
