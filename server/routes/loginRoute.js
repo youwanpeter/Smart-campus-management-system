@@ -52,7 +52,7 @@ router.post("/verify", async (req, res) => {
 
     //Find user in the database
     const user = await Users.findOne({ username }); // Updated to Users
-    console.log(`User verified: ${username}, role: ${user.role}`);
+    console.log(`User verified: ${username}, role: ${user.role}, name: ${user.name}`);
 
     //Check if JWT_SECRET is set
     if (!process.env.JWT_SECRET) {
@@ -62,7 +62,7 @@ router.post("/verify", async (req, res) => {
 
     //Generate JWT token
     const token = jwt.sign(
-      { username: user.username, role: user.role },
+      { username: user.username, role: user.role, name: user.name },
       process.env.JWT_SECRET,
       { expiresIn: "8h" }
     );

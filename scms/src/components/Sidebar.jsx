@@ -73,6 +73,11 @@ const Sidebar = ({ userRole }) => {
       label: <Link to="/communication">Communication</Link>,
     },
     {
+      key: "/files",
+      icon: <WechatOutlined />,
+      label: <Link to="/files">File</Link>,
+    },
+    {
       key: "/reports",
       icon: <FileTextOutlined />,
       label: <Link to="/reports">Reports</Link>,

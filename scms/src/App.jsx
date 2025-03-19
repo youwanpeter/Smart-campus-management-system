@@ -16,6 +16,7 @@ import Events from "./pages/Events";
 import Previewevent from "./pages/Previewevent";
 import Resource from "./pages/Resource";
 import Communication from "./pages/Communication";
+import LecturerView from "./pages/lecturerView";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import Logout from "./pages/Logout";
@@ -132,6 +133,7 @@ const App = () => {
                 )}
 
                 <Route path="/communication" element={<Communication />} />
+                <Route path="/files" element={<LecturerView />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/logout" element={<Logout />} />
