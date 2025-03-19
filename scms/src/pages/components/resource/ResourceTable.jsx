@@ -29,7 +29,7 @@ const ResourceTable = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        console.log("Token from localStorage:", token); // Debugging
+        console.log("Token from localStorage:", token); 
         
         if (!token) {
           console.warn("No authentication token found");
@@ -39,7 +39,7 @@ const ResourceTable = () => {
         
         try {
           const decoded = jwtDecode(token);
-          console.log("Decoded token:", decoded); // Debugging
+          console.log("Decoded token:", decoded); 
           
           // Make sure the decoded token has the expected structure
           if (decoded && decoded.username && decoded.role) {
@@ -217,26 +217,26 @@ const ResourceTable = () => {
   //Handle review approval
   const handleApproveReview = async (reviewId) => {
     try {
-      await axios.put(`http://localhost:5000/api/resources/review/${reviewId}/approve`);
+      const response = await axios.put(`http://localhost:5000/api/resources/review/${reviewId}/approve`);
       message.success("Review approved successfully!");
       fetchPendingReviews();
       fetchResources();
     } catch (error) {
       console.error("Error approving review:", error);
-      message.error("Failed to approve review");
+      message.error(`Failed to approve review: ${error.response?.data?.message || 'Unknown error'}`);
     }
   };
 
   //Handle review rejection
   const handleRejectReview = async (reviewId) => {
     try {
-      await axios.put(`http://localhost:5000/api/resources/review/${reviewId}/reject`);
+      const response = await axios.put(`http://localhost:5000/api/resources/review/${reviewId}/reject`);
       message.success("Review rejected successfully!");
       fetchPendingReviews();
       fetchResources();
     } catch (error) {
       console.error("Error rejecting review:", error);
-      message.error("Failed to reject review");
+      message.error(`Failed to reject review: ${error.response?.data?.message || 'Unknown error'}`);
     }
   };
 
@@ -251,6 +251,12 @@ const ResourceTable = () => {
     { title: "Purpose", dataIndex: "resource_purpose", key: "resource_purpose" },
     { title: "Return Status", dataIndex: "resource_status", key: "resource_status" },
     { title: "Remarks", dataIndex: "resource_remarks", key: "resource_remarks" },
+    { 
+      title: "Status", 
+      dataIndex: "status", 
+      key: "status",
+      render: (text) => text === "Pending" ? <span style={{ color: 'orange' }}>Pending</span> : text
+    },
     {
       title: "Actions",
       key: "actions",
@@ -299,6 +305,8 @@ const ResourceTable = () => {
       key: "action_type",
       render: (text) => text.charAt(0).toUpperCase() + text.slice(1)
     },
+    { title: "Resource ID", dataIndex: "id", key: "id" },
+    { title: "Original ID", dataIndex: "original_id", key: "original_id" },
     { title: "Hall No.", dataIndex: "resource_name", key: "resource_name" },
     { title: "Acquired Date", dataIndex: "acquired_date", key: "acquired_date" },
     { title: "Return Date", dataIndex: "return_date", key: "return_date" },
@@ -333,8 +341,8 @@ const ResourceTable = () => {
     },
   ];
 
-  //Filter resources based on status for display
-  const approvedResources = resources.filter(resource => resource.status === "Approved");
+  //Show all resources for better debugging (including pending ones)
+  const allResources = resources;
 
   //For debugging - manually set user role
   const setUserRole = (role) => {
@@ -391,7 +399,7 @@ const ResourceTable = () => {
             </Button>
             <Table
               columns={resourceColumns}
-              dataSource={approvedResources}
+              dataSource={allResources}
               rowKey="id"
             />
           </TabPane>
@@ -421,7 +429,7 @@ const ResourceTable = () => {
           </Button>
           <Table
             columns={resourceColumns}
-            dataSource={approvedResources}
+            dataSource={allResources}
             rowKey="id"
           />
         </div>

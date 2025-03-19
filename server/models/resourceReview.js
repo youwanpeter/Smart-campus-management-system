@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
   const resourceReviewSchema = new mongoose.Schema({
+    id: { type: String },
     resource_name: { type: String, required: true },
     acquired_date: { type: String, required: true },
     return_date: { type: String, required: true },

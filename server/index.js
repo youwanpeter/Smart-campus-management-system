@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const connectDB = require("./db");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 app.use(express.json());
@@ -27,7 +28,6 @@ const corsOptions = {
   credentials: true,
 };
 
-// Add this to your main Express app file
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(cors(corsOptions));
