@@ -27,6 +27,8 @@ const sendVerificationEmail = async (email, username) => {
     expiry: Date.now() + 5 * 60 * 1000
   };
 
+  console.log(code);
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,

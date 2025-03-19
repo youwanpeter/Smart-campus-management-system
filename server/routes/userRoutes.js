@@ -52,4 +52,14 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+
+router.get('/instructors', async (req, res) => {
+  try {
+    const instructors = await User.find({ role: 'Lecturer' });
+    res.json(instructors);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching instructors" });
+  }
+});
+
 module.exports = router;
