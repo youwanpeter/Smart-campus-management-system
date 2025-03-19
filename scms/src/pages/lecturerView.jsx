@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { Table, Spin, Alert, Typography, Button } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+
+const { Title } = Typography;
 
 const LecturerView = () => {
   const [files, setFiles] = useState([]);
@@ -9,12 +13,10 @@ const LecturerView = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    //Get lecturer name from auth token
     const token = localStorage.getItem("authToken");
     if (token) {
       const decoded = jwtDecode(token);
       setLecturerName(decoded.name);
-      
       fetchLecturerFiles(decoded.name);
     }
   }, []);
@@ -36,41 +38,54 @@ const LecturerView = () => {
     }
   };
 
+  const columns = [
+    {
+      title: "File Name",
+      dataIndex: "originalFilename",
+      key: "originalFilename",
+    },
+    {
+      title: "Student Name",
+      dataIndex: "studentName",
+      key: "studentName",
+    },
+    {
+      title: "Uploaded Date",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (date) => new Date(date).toLocaleDateString(),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Button
+          type="primary"
+          icon={<DownloadOutlined />}
+          href={`/api/files/download/${record._id}`}
+        >
+          Download
+        </Button>
+      ),
+    },
+  ];
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">Communication - Files from Students</h1>
-      
+    <div className="p-6 bg-white shadow-lg rounded-lg">
+      <Title level={2}>Communication - Files from Students</Title>
       {loading ? (
-        <p>Loading files...</p>
+        <Spin size="large" className="block mt-6" />
       ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : files.length === 0 ? (
-        <p className="text-gray-500">No files have been shared with you yet.</p>
+        <Alert message={error} type="error" showIcon className="mt-4" />
       ) : (
-        <div>
-          <ul className="border rounded divide-y">
-            {files.map((file) => (
-              <li key={file._id} className="p-4 hover:bg-gray-50">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium">{file.originalFilename}</p>
-                    <p className="text-sm text-gray-500">
-                      From: {file.studentName} • {new Date(file.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <a
-                      href={`/api/files/download/${file._id}`}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
-                    >
-                      Download
-                    </a>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Table
+          dataSource={files}
+          columns={columns}
+          rowKey="_id"
+          bordered
+          pagination={{ pageSize: 5 }}
+          className="mt-4"
+        />
       )}
     </div>
   );
