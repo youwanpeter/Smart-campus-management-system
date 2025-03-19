@@ -38,6 +38,28 @@ const LecturerView = () => {
     }
   };
 
+  const handleDownload = async (fileId) => {
+    try {
+      const response = await axios.get(`/api/files/download/${fileId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+        responseType: "blob", 
+      });
+  
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", fileId); 
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Download failed:", error);
+      setError("Failed to download file. Please try again.");
+    }
+  };  
+
   const columns = [
     {
       title: "File Name",
@@ -62,7 +84,7 @@ const LecturerView = () => {
         <Button
           type="primary"
           icon={<DownloadOutlined />}
-          href={`/api/files/download/${record._id}`}
+          onClick={() => handleDownload(record._id)}
         >
           Download
         </Button>

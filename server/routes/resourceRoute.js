@@ -7,7 +7,6 @@ const Users = require("../models/Users.js");
 //Generate ID with 01, 02, 03 precedence format
 const generateId = async () => {
   try {
-    //Only consider approved resources when generating IDs
     const resources = await Resource.find({ status: "Approved" }).sort({ id: 1 });
     let newId = resources.length > 0 ? parseInt(resources[resources.length - 1].id) + 1 : 1;
     return newId.toString().padStart(2, "0");
@@ -134,7 +133,7 @@ router.post("/review", async (req, res) => {
     await reviewRequest.save();
     console.log(`Review request saved with ID: ${reviewRequest._id}`);
 
-    // If this is an add request, create a pending resource
+    //If this is an add request, create a pending resource
     if (req.body.action_type === "add") {
       const tempId = await generateId();
       console.log(`Generated temporary ID: ${tempId} for pending resource`);
@@ -156,7 +155,7 @@ router.post("/review", async (req, res) => {
       await newResource.save();
       console.log(`Pending resource created with temporary ID: ${tempId}`);
 
-      // Update the review with the resource ID
+      //Update the review with the resource ID
       reviewRequest.id = tempId;
       await reviewRequest.save();
       console.log(`Review request updated with resource ID: ${tempId}`);
@@ -180,7 +179,7 @@ router.put("/review/:id/approve", async (req, res) => {
       return res.status(404).json({ message: "Review not found" });
     }
 
-    // Update review status
+    //Update review status
     review.status = "Approved";
     review.processed_at = new Date();
     await review.save();
@@ -189,15 +188,14 @@ router.put("/review/:id/approve", async (req, res) => {
     if (review.action_type === "add") {
       console.log(`Processing ADD action for review ID: ${req.params.id}`);
 
-      // Check if the ID exists and is in a valid format
+      //Check if the ID exists and is in a valid format
       if (review.id && /^\d+$/.test(review.id)) {
-        // Find the resource using the properly formatted ID
         const pendingResource = await Resource.findOne({ id: review.id });
         
         if (!pendingResource) {
           console.warn(`No resource found with id: ${review.id}`);
           
-          // Instead of returning an error, create a new resource
+          //Instead of returning an error, create a new resource
           const newId = await generateId();
           const newResource = new Resource({
             id: newId,
@@ -218,12 +216,12 @@ router.put("/review/:id/approve", async (req, res) => {
           return res.json({ message: "Review approved and new resource created" });
         }
 
-        // Update the resource status to "Approved"
+        //Update the resource status to "Approved"
         pendingResource.status = "Approved";
         const updatedResource = await pendingResource.save();
         console.log(`Updated resource status to Approved, ID: ${updatedResource.id}`);
       } else {
-        // No valid pending resource ID, create a new one
+        //No valid pending resource ID, create a new one
         const newId = await generateId();
         const newResource = new Resource({
           id: newId,
@@ -244,7 +242,7 @@ router.put("/review/:id/approve", async (req, res) => {
       }
     }
     
-    // Rest of the function remains the same...
+    //Rest of the function remains the same...
     
     res.json({ message: "Review approved successfully" });
   } catch (error) {

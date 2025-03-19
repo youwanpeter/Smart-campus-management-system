@@ -135,17 +135,24 @@ const App = () => {
                   <Route path="/previewevent" element={<Previewevent />} />
                 )}
 
-                  <Route path="/courses" element={<CourseList />} />
-                  <Route path="/courses/create" element={<CreateCourse />} />
-                  <Route path="/subjects" element={<Subjects />} />
-                <Route path="/communication" element={<Communication />} />
-                <Route path="/files" element={<LecturerView />} />
+                <Route path="/courses" element={<CourseList />} />
+                <Route path="/courses/create" element={<CreateCourse />} />
+                <Route path="/subjects" element={<Subjects />} />
+                {userRole !== "Admin" && userRole !== "Lecturer" && (
+                  <Route path="/communication" element={<Communication />} />
+                )}
+                {userRole !== "Admin" && userRole !== "Student" && (
+                  <Route path="/student-files" element={<LecturerView />} />
+                )}
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/logout" element={<Logout />} />
 
                 <Route path="/users" element={<Navigate to="/" replace />} />
                 <Route path="/resource" element={<Navigate to="/" replace />} />
+                <Route path="/student-file" element={<Navigate to="/" replace />} />
+                <Route path="/communication" element={<Navigate to="/" replace />} />
+
               </Routes>
             </Col>
           </Row>

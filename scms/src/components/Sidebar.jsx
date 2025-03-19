@@ -12,6 +12,7 @@ import {
   NotificationOutlined,
   BookOutlined,
   WechatOutlined,
+  FileOutlined,
 } from "@ant-design/icons";
 
 const Sidebar = ({ userRole }) => {
@@ -25,12 +26,12 @@ const Sidebar = ({ userRole }) => {
     },
     ...(userRole !== "Lecturer" && userRole !== "Student"
       ? [
-          {
-            key: "/users",
-            icon: <UserOutlined />,
-            label: <Link to="/users">Users</Link>,
-          },
-        ]
+        {
+          key: "/users",
+          icon: <UserOutlined />,
+          label: <Link to="/users">Users</Link>,
+        },
+      ]
       : []),
     {
       key: "/courses",
@@ -44,49 +45,56 @@ const Sidebar = ({ userRole }) => {
     },
     ...(userRole !== "Lecturer" && userRole !== "Student"
       ? [
-          {
-            key: "/events",
-            icon: <UserOutlined />,
-            label: <Link to="/events">Events</Link>,
-          },
-        ]
+        {
+          key: "/events",
+          icon: <UserOutlined />,
+          label: <Link to="/events">Events</Link>,
+        },
+      ]
       : []),
 
     ...(userRole !== "Student"
       ? [
-          {
-            key: "/resource",
-            icon: <BookOutlined />,
-            label: <Link to="/resource">Resource</Link>,
-          },
-        ]
+        {
+          key: "/resource",
+          icon: <BookOutlined />,
+          label: <Link to="/resource">Resource</Link>,
+        },
+      ]
       : []),
 
     ...(userRole !== "Admin"
       ? [
-          {
-            key: "/previewevent",
-            icon: <BookOutlined />,
-            label: <Link to="/previewevent">Events</Link>,
-          },
-        ]
+        {
+          key: "/previewevent",
+          icon: <BookOutlined />,
+          label: <Link to="/previewevent">Events</Link>,
+        },
+      ]
       : []),
 
+    ...(userRole !== "Admin" && userRole !== "Lecturer"
+      ? [
+        {
+          key: "/communication",
+          icon: <WechatOutlined />,
+          label: <Link to="/communication">Communication</Link>,
+        },
+      ]
+      : []),
+    ...(userRole !== "Admin" && userRole !== "Student"
+      ? [
+        {
+          key: "/student-files",
+          icon: <FileOutlined />,
+          label: <Link to="/student-files">Student Files</Link>,
+        },
+      ]
+      : []),
     {
-      key: "/communication",
-      icon: <WechatOutlined />,
-      label: <Link to="/communication">Communication</Link>,
-    },
-    {
-<<<<<<< HEAD
-      key: "/files",
-      icon: <WechatOutlined />,
-      label: <Link to="/files">File</Link>,
-=======
       key: "/subjects",
       icon: <ScheduleOutlined />,
       label: <Link to="/subjects">Subjects</Link>,
->>>>>>> 95badcbf697fcf5afb356e81b5aa13f94aba95ec
     },
     {
       key: "/reports",
