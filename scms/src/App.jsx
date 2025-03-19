@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Button, Layout, Row, Col, theme } from "antd";
 import Sidebar from "./components/Sidebar";
-import CustomHeader from "./components/Header";
+import CustomHeader from "./components/CustomHeader";
 import { MenuUnfoldOutlined } from "@ant-design/icons";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
@@ -74,6 +74,15 @@ const App = () => {
     localStorage.removeItem("authToken");
     setIsAuthenticated(false);
     window.location.href = "/login";
+  };
+
+  const App = () => {
+    return (
+      <div>
+        <CustomHeader />
+        {/* Add other components or content here */}
+      </div>
+    );
   };
 
   const AuthenticatedLayout = () => (

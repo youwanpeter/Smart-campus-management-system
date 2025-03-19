@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import "../css/Dashboard.css";
 import Graphs from "./components/dashboard/Graphs";
+import Calendar from "./components/dashboard/Calendar";
 
 const Dashboard = () => {
   const [eventCount, setEventCount] = useState(0);
@@ -43,8 +44,8 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Dashboard</h1>
+    <div style={{ padding: "2px" }}>
+      <h1>Welcome...</h1>
       <Row gutter={16}>
         <Col xs={24} sm={12} md={8}>
           <Card
@@ -54,8 +55,7 @@ const Dashboard = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+                  alignItems: "center" }}
               >
                 <span>Total Events </span>
                 <NotificationOutlined style={{ fontSize: "20px" }} />
@@ -136,6 +136,10 @@ const Dashboard = () => {
           </Card>
         </Col>
       </Row>
+      <div style={{ marginTop: 20 }}>
+        <Calendar />
+      </div>
+
       <Graphs />
     </div>
   );
