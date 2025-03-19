@@ -25,30 +25,48 @@ const Sidebar = ({ userRole }) => {
     },
     ...(userRole !== "Lecturer" && userRole !== "Student"
       ? [
-        {
-          key: "/users",
-          icon: <UserOutlined />,
-          label: <Link to="/users">Users</Link>,
-        },
-      ]
+          {
+            key: "/users",
+            icon: <UserOutlined />,
+            label: <Link to="/users">Users</Link>,
+          },
+        ]
       : []),
     {
       key: "/schedule",
       icon: <ScheduleOutlined />,
       label: <Link to="/schedule">Schedule</Link>,
     },
-    {
-      key: "/events",
-      icon: <NotificationOutlined />,
-      label: <Link to="/events">Events</Link>,
-    },
-     ...(userRole !== "Student"
-      ? [{
-      key: "/resource",
-      icon: <BookOutlined />,
-      label: <Link to="/resource">Resource</Link>,
-    },
-      ] : []),
+    ...(userRole !== "Lecturer" && userRole !== "Student"
+      ? [
+          {
+            key: "/events",
+            icon: <UserOutlined />,
+            label: <Link to="/events">Events</Link>,
+          },
+        ]
+      : []),
+
+    ...(userRole !== "Student"
+      ? [
+          {
+            key: "/resource",
+            icon: <BookOutlined />,
+            label: <Link to="/resource">Resource</Link>,
+          },
+        ]
+      : []),
+
+    ...(userRole !== "Admin"
+      ? [
+          {
+            key: "/previewevent",
+            icon: <BookOutlined />,
+            label: <Link to="/previewevent">Events</Link>,
+          },
+        ]
+      : []),
+
     {
       key: "/communication",
       icon: <WechatOutlined />,
