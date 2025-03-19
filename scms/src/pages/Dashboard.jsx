@@ -10,8 +10,8 @@ import Graphs from "./components/dashboard/Graphs";
 
 const Dashboard = () => {
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Dashboard</h1>
+    <div style={{ padding: "2px" }}>
+      <h1>Welcome...</h1>
       <Row gutter={16}>
         <Col xs={24} sm={12} md={8}>
           <Card
@@ -21,8 +21,7 @@ const Dashboard = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+                  alignItems: "center" }}
               >
                 <span>Card 1</span>
                 <HomeOutlined style={{ fontSize: "20px" }} />
