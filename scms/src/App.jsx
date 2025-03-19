@@ -17,8 +17,6 @@ import Previewevent from "./pages/Previewevent";
 import Resource from "./pages/Resource";
 import Communication from "./pages/Communication";
 import LecturerView from "./pages/lecturerView";
-import Reports from "./pages/Reports";
-import Settings from "./pages/Settings";
 import Logout from "./pages/Logout";
 import Login from "./Login";
 import { jwtDecode } from "jwt-decode";
@@ -135,13 +133,11 @@ const App = () => {
                   <Route path="/previewevent" element={<Previewevent />} />
                 )}
 
-                  <Route path="/courses" element={<CourseList />} />
-                  <Route path="/courses/create" element={<CreateCourse />} />
-                  <Route path="/subjects" element={<Subjects />} />
+                <Route path="/courses" element={<CourseList />} />
+                <Route path="/courses/create" element={<CreateCourse />} />
+                <Route path="/subjects" element={<Subjects />} />
                 <Route path="/communication" element={<Communication />} />
                 <Route path="/files" element={<LecturerView />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/settings" element={<Settings />} />
                 <Route path="/logout" element={<Logout />} />
 
                 <Route path="/users" element={<Navigate to="/" replace />} />

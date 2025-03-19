@@ -12,6 +12,7 @@ import Calendar from "./components/dashboard/Calendar";
 const Dashboard = () => {
   const [eventCount, setEventCount] = useState(0);
   const [usersCount, setUsersCount] = useState(0);
+  const [courseCount, setCourseCount] = useState(0);
 
   // Fetch the event count from the API
   useEffect(() => {
@@ -43,9 +44,24 @@ const Dashboard = () => {
     fetchUsersCount();
   }, []);
 
+  // Fetch the course count from the API
+  useEffect(() => {
+    const fetchCourseCount = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/courses");
+        const data = await response.json();
+        setCourseCount(data.length); // Set the total count of events
+      } catch (error) {
+        console.error("Error fetching event count:", error);
+      }
+    };
+
+    fetchCourseCount();
+  }, []);
+
   return (
     <div style={{ padding: "2px" }}>
-      <h1>Welcome...</h1>
+      <h1>Hii... </h1>
       <Row gutter={16}>
         <Col xs={24} sm={12} md={8}>
           <Card
@@ -55,7 +71,8 @@ const Dashboard = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  alignItems: "center" }}
+                  alignItems: "center",
+                }}
               >
                 <span>Total Events </span>
                 <NotificationOutlined style={{ fontSize: "20px" }} />
@@ -125,22 +142,33 @@ const Dashboard = () => {
                   alignItems: "center",
                 }}
               >
-                <span>Card 3</span>
+                <span>Total Courses</span>
                 <FileDoneOutlined style={{ fontSize: "20px" }} />
               </div>
             }
             variant="bordered"
             style={{ backgroundColor: "#f0f2f5" }}
           >
-            <p>Content of Card 3</p>
+            <Row>
+              <Col>
+                <p>Total Courses Create</p>
+              </Col>
+              <Col
+                style={{
+                  marginLeft: "90px",
+                  fontSize: "20px",
+                  marginTop: "-5px",
+                }}
+              >
+                <h3>{courseCount}</h3>
+              </Col>
+            </Row>
           </Card>
         </Col>
       </Row>
       <div style={{ marginTop: 20 }}>
         <Calendar />
       </div>
-
-      <Graphs />
     </div>
   );
 };
