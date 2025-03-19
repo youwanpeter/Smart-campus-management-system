@@ -5,10 +5,26 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 
+<<<<<<< HEAD
+// Middleware to set CORS headers
+router.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
+// Generate a unique event ID with a leading zero
+let eventCounter = 0; // This could be replaced with a persistent storage solution
+function generateEventID() {
+  eventCounter++;
+  return String(eventCounter).padStart(2, "0");
+=======
 // Ensure uploads directory exists
 const uploadDir = "./uploads/";
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
+>>>>>>> 1d173788e667e8021fb2dc4d572f53658027a468
 }
 
 // Middleware to handle file upload using multer
