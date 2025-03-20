@@ -145,8 +145,6 @@ const App = () => {
                   <Route path="/student-files" element={<LecturerView />} />
                 )}
                 <Route path="/reports" element={<Reports />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/logout" element={<Logout />} />
 
                 <Route path="/users" element={<Navigate to="/" replace />} />
                 <Route path="/resource" element={<Navigate to="/" replace />} />
