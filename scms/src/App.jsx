@@ -17,8 +17,6 @@ import Previewevent from "./pages/Previewevent";
 import Resource from "./pages/Resource";
 import Communication from "./pages/Communication";
 import LecturerView from "./pages/lecturerView";
-import Reports from "./pages/Reports";
-import Settings from "./pages/Settings";
 import Logout from "./pages/Logout";
 import Login from "./Login";
 import { jwtDecode } from "jwt-decode";
@@ -138,6 +136,10 @@ const App = () => {
                 <Route path="/courses" element={<CourseList />} />
                 <Route path="/courses/create" element={<CreateCourse />} />
                 <Route path="/subjects" element={<Subjects />} />
+<<<<<<< HEAD
+                <Route path="/communication" element={<Communication />} />
+                <Route path="/files" element={<LecturerView />} />
+=======
                 {userRole !== "Admin" && userRole !== "Lecturer" && (
                   <Route path="/communication" element={<Communication />} />
                 )}
@@ -145,6 +147,12 @@ const App = () => {
                   <Route path="/student-files" element={<LecturerView />} />
                 )}
                 <Route path="/reports" element={<Reports />} />
+<<<<<<< HEAD
+=======
+                <Route path="/settings" element={<Settings />} />
+>>>>>>> 13b0c815956a74c6db89e1ee316c4f866ec7f422
+                <Route path="/logout" element={<Logout />} />
+>>>>>>> e1e5c684f0295eed4576266ea5ef2a61ce7eea2f
 
                 <Route path="/users" element={<Navigate to="/" replace />} />
                 <Route path="/resource" element={<Navigate to="/" replace />} />
