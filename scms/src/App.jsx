@@ -144,7 +144,16 @@ const App = () => {
                 {userRole !== "Admin" && userRole !== "Student" && (
                   <Route path="/student-files" element={<LecturerView />} />
                 )}
+<<<<<<< HEAD
+=======
+                <Route path="/reports" element={<Reports />} />
+<<<<<<< HEAD
+=======
+                <Route path="/settings" element={<Settings />} />
+>>>>>>> 13b0c815956a74c6db89e1ee316c4f866ec7f422
+>>>>>>> 01b087060d8cb8d14de826120ccccd0e1956ce45
                 <Route path="/logout" element={<Logout />} />
+>>>>>>> e1e5c684f0295eed4576266ea5ef2a61ce7eea2f
 
                 <Route path="/users" element={<Navigate to="/" replace />} />
                 <Route path="/resource" element={<Navigate to="/" replace />} />
