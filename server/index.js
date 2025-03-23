@@ -44,10 +44,6 @@ app.use("/api/lecturers", require("./routes/lecturers"));
 app.use("/api/courses", require("./routes/courseRoute.js"));
 app.use("/api/subjects", require("./routes/subjectsRoute.js"));
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 13b0c815956a74c6db89e1ee316c4f866ec7f422
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
