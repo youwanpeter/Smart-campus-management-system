@@ -9,6 +9,7 @@ import "../css/Dashboard.css";
 import Graphs from "./components/dashboard/Graphs";
 import Calendar from "./components/dashboard/Calendar";
 import { useLocation } from "react-router-dom";
+import Banner from "./components/dashboard/Banner";
 
 const Dashboard = () => {
   const [eventCount, setEventCount] = useState(0);
@@ -63,7 +64,6 @@ const Dashboard = () => {
 
   return (
     <div style={{ padding: "2px" }}>
-      <h1>Hii</h1>
       <Row gutter={16}>
         <Col xs={24} sm={12} md={8}>
           <Card
@@ -77,11 +77,16 @@ const Dashboard = () => {
                 }}
               >
                 <span>Total Events </span>
-                <NotificationOutlined style={{ fontSize: "20px" }} />
+                <NotificationOutlined
+                  style={{ fontSize: "30px", color: "rgb(255, 17, 0)" }}
+                />
               </div>
             }
             variant="bordered"
-            style={{ backgroundColor: "#f0f2f5" }}
+            style={{
+              background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+              borderRadius: "16px",
+            }}
           >
             <Row>
               <Col>
@@ -89,7 +94,7 @@ const Dashboard = () => {
               </Col>
               <Col
                 style={{
-                  marginLeft: "90px",
+                  marginLeft: "200px",
                   fontSize: "20px",
                   marginTop: "-5px",
                 }}
@@ -111,11 +116,16 @@ const Dashboard = () => {
                 }}
               >
                 <span>Total Users</span>
-                <UserOutlined style={{ fontSize: "20px" }} />
+                <UserOutlined
+                  style={{ fontSize: "30px", color: "rgb(23, 92, 27)" }}
+                />
               </div>
             }
             variant="bordered"
-            style={{ backgroundColor: "#f0f2f5" }}
+            style={{
+              background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+              borderRadius: "16px",
+            }}
           >
             <Row>
               <Col>
@@ -123,7 +133,7 @@ const Dashboard = () => {
               </Col>
               <Col
                 style={{
-                  marginLeft: "100px",
+                  marginLeft: "200px",
                   fontSize: "20px",
                   marginTop: "-5px",
                 }}
@@ -145,11 +155,16 @@ const Dashboard = () => {
                 }}
               >
                 <span>Total Courses</span>
-                <FileDoneOutlined style={{ fontSize: "20px" }} />
+                <FileDoneOutlined
+                  style={{ fontSize: "30px", color: "rgb(17, 0, 255)" }}
+                />
               </div>
             }
             variant="bordered"
-            style={{ backgroundColor: "#f0f2f5" }}
+            style={{
+              background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+              borderRadius: "16px",
+            }}
           >
             <Row>
               <Col>
@@ -157,7 +172,7 @@ const Dashboard = () => {
               </Col>
               <Col
                 style={{
-                  marginLeft: "80px",
+                  marginLeft: "180px",
                   fontSize: "20px",
                   marginTop: "-5px",
                 }}
@@ -168,6 +183,14 @@ const Dashboard = () => {
           </Card>
         </Col>
       </Row>
+      <div>
+        <Row>
+          <Col span={24}>
+            <Banner />
+          </Col>
+        </Row>
+      </div>
+
       <div style={{ marginTop: 20 }}>
         <Calendar />
       </div>
