@@ -47,7 +47,6 @@ const Sidebar = ({ userRole }) => {
     },
     ...(userRole !== "Admin" && userRole !== "Student"
       ? [
-<<<<<<< HEAD
           {
             key: "/student-files",
             icon: <FileDoneOutlined />,
@@ -91,90 +90,6 @@ const Sidebar = ({ userRole }) => {
           },
         ]
       : []),
-=======
-        {
-          key: "/student-files",
-          icon: <FileDoneOutlined />,
-          label: <Link to="/student-files">Student Files</Link>,
-        },
-      ]
-      : []),
-<<<<<<< HEAD
-      ...(userRole !== "Admin" && userRole !== "Lecturer"
-        ? [
-          {
-            key: "/communication",
-            icon: <WechatOutlined />,
-            label: <Link to="/communication">Communication</Link>,
-          },
-        ]
-        : []),
-      ...(userRole !== "Student"
-        ? [
-          {
-            key: "/resource",
-            icon: <CompassOutlined />,
-            label: <Link to="/resource">Resource</Link>,
-          },
-        ]
-        : []),
-    ...(userRole !== "Lecturer" && userRole !== "Student"
-      ? [
-        {
-          key: "/events",
-          icon: <ScheduleOutlined />,
-          label: <Link to="/events">Events</Link>,
-        },
-      ]
-      : []),
-    ...(userRole !== "Admin"
-      ? [
-        {
-          key: "/previewevent",
-          icon: <ScheduleOutlined />,
-          label: <Link to="/previewevent">Events</Link>,
-        },
-      ]
-      : []),
-=======
-    {
-<<<<<<< HEAD
-      key: "/communication",
-      icon: <WechatOutlined />,
-      label: <Link to="/communication">Communication</Link>,
-    },
-    {
-      key: "/files",
-      icon: <WechatOutlined />,
-      label: <Link to="/files">File</Link>,
-    },
-    {
-      key: "/subjects",
-      icon: <ScheduleOutlined />,
-      label: <Link to="/subjects">Subjects</Link>,
-=======
-      key: "/subjects",
-      icon: <ScheduleOutlined />,
-      label: <Link to="/subjects">Subjects</Link>,
-    },
-    {
-      key: "/reports",
-      icon: <FileTextOutlined />,
-      label: <Link to="/reports">Reports</Link>,
-    },
-    {
-      key: "/settings",
-      icon: <SettingOutlined />,
-      label: <Link to="/settings">Settings</Link>,
->>>>>>> 13b0c815956a74c6db89e1ee316c4f866ec7f422
-    },
-    {
-      key: "/logout",
-      icon: <LogoutOutlined />,
-      label: <Link to="/logout">LogOut</Link>,
-    },
->>>>>>> e1e5c684f0295eed4576266ea5ef2a61ce7eea2f
->>>>>>> 01b087060d8cb8d14de826120ccccd0e1956ce45
   ];
 
   return (

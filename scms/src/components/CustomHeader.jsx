@@ -13,7 +13,12 @@ import {
   Typography,
 } from "antd";
 import Search from "antd/es/transfer/search";
-import { UserOutlined, UploadOutlined, NotificationOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  UploadOutlined,
+  NotificationOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 
 const CustomHeader = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -29,12 +34,13 @@ const CustomHeader = () => {
   };
 
   const handleOk = () => {
-    form.validateFields()
-      .then(values => {
+    form
+      .validateFields()
+      .then((values) => {
         console.log("Saved Profile Data: ", values);
         setIsModalVisible(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Validation Error: ", error);
       });
   };
@@ -43,34 +49,73 @@ const CustomHeader = () => {
     setIsModalVisible(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    window.location.href = "/login";
+  };
+
   const notificationContent = (
     <div className="custom-notification-popup">
       <List
         dataSource={notifications}
-        renderItem={(item) => <List.Item className="custom-notification-item">{item}</List.Item>}
+        renderItem={(item) => (
+          <List.Item className="custom-notification-item">{item}</List.Item>
+        )}
       />
     </div>
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "02px", gap: "20px", backgroundColor: "#fff", align: "center", width: "100%" }}>
-      <Search placeholder="Search Dashboard" allowclear/>
-        <Dropdown overlay={notificationContent} trigger={["click"]} overlayStyle={{
-    maxWidth: "600px",
-    borderRadius: "16px",
-    boxShadow: "2 8px 24px rgba(25, 6, 134, 0.7)",
-    padding: "0px",
-    backgroundColor: "#fff",
-    fontStyle: "italic",
-  }}>
-            <Button type="" className="header-icon" icon={<NotificationOutlined style={{ cursor: "pointer" }} />} />
-        </Dropdown>
-      <Button type="link" onClick={showModal}>
-        <Avatar icon={<UserOutlined style={{ fontSize: "24px", cursor: "pointer" }} />} />
-      </Button>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "02px",
+        gap: "10px",
+        backgroundColor: "#fff",
+        align: "center",
+        width: "100%",
+      }}
+    >
+      <Search placeholder="Search Dashboard" allowclear />
+      <Dropdown
+        menu={notificationContent}
+        trigger={["click"]}
+        menuStyle={{
+          maxWidth: "600px",
+          borderRadius: "16px",
+          boxShadow: "2 8px 24px rgba(25, 6, 134, 0.7)",
+          padding: "0px",
+          backgroundColor: "#fff",
+          fontStyle: "italic",
+        }}
+      >
+        <Button
+          type=""
+          className="header-icon"
+          icon={<NotificationOutlined style={{ cursor: "pointer" }} />}
+        />
+      </Dropdown>
+
+      <Button
+        type=""
+        className="header-icon"
+        onClick={showModal}
+        icon={<UserOutlined />}
+        style={{ cursor: "pointer" }}
+      ></Button>
+
+      <Button
+        type=""
+        className="header-icon"
+        icon={<LogoutOutlined />}
+        onClick={handleLogout}
+        style={{ cursor: "pointer" }}
+      />
+
       <Modal
         title="My Profile"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
       >
@@ -104,7 +149,9 @@ const CustomHeader = () => {
           <Form.Item
             name="firstName"
             label="First Name"
-            rules={[{ required: true, message: "Please enter your first name" }]}
+            rules={[
+              { required: true, message: "Please enter your first name" },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -125,7 +172,9 @@ const CustomHeader = () => {
           <Form.Item
             name="dob"
             label="Date of Birth"
-            rules={[{ required: true, message: "Please select your date of birth" }]}
+            rules={[
+              { required: true, message: "Please select your date of birth" },
+            ]}
           >
             <DatePicker style={{ width: "75%" }} />
           </Form.Item>

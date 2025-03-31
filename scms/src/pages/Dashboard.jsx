@@ -8,11 +8,13 @@ import {
 import "../css/Dashboard.css";
 import Graphs from "./components/dashboard/Graphs";
 import Calendar from "./components/dashboard/Calendar";
+import { useLocation } from "react-router-dom";
 
 const Dashboard = () => {
   const [eventCount, setEventCount] = useState(0);
   const [usersCount, setUsersCount] = useState(0);
   const [courseCount, setCourseCount] = useState(0);
+  const location = useLocation();
 
   // Fetch the event count from the API
   useEffect(() => {
@@ -61,7 +63,7 @@ const Dashboard = () => {
 
   return (
     <div style={{ padding: "2px" }}>
-      <h1>Hii... </h1>
+      <h1>Hii</h1>
       <Row gutter={16}>
         <Col xs={24} sm={12} md={8}>
           <Card
@@ -155,7 +157,7 @@ const Dashboard = () => {
               </Col>
               <Col
                 style={{
-                  marginLeft: "90px",
+                  marginLeft: "80px",
                   fontSize: "20px",
                   marginTop: "-5px",
                 }}

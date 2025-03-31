@@ -23,6 +23,32 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Helper function to generate sequential ID
+async function generateSequentialId() {
+  try {
+    // Find the event with the highest ID
+    const latestEvent = await Event.findOne().sort({ event_id: -1 });
+
+    let nextId = 1; // Start with 1 if no events exist
+
+    if (latestEvent && latestEvent.event_id) {
+      // Extract the numeric part of the ID
+      const currentId = parseInt(latestEvent.event_id, 10);
+
+      // If the conversion worked, increment it
+      if (!isNaN(currentId)) {
+        nextId = currentId + 1;
+      }
+    }
+
+    // Format with leading zeros (01, 02, 03, etc.)
+    return nextId.toString().padStart(2, "0");
+  } catch (error) {
+    console.error("Error generating sequential ID:", error);
+    throw error;
+  }
+}
+
 // Route to get all events
 router.get("/all", async (req, res) => {
   try {
@@ -43,9 +69,13 @@ router.post("/create", upload.single("event_image"), async (req, res) => {
     // Check if event image file exists
     const eventImage = req.file ? `/uploads/${req.file.filename}` : "";
 
+    // Generate sequential ID for the new event
+    const eventId = await generateSequentialId();
+
     // Create new event document
     const newEvent = new Event({
       ...req.body,
+      event_id: eventId, // Set the generated sequential ID
       event_image: eventImage, // Store image path if file is uploaded
     });
 
@@ -115,7 +145,7 @@ router.put(
   }
 );
 
-// ADD THE DELETE ROUTE - This was missing from your original code
+// Route to delete an event
 router.delete("/delete/:event_id", async (req, res) => {
   try {
     console.log("Deleting event with ID:", req.params.event_id);

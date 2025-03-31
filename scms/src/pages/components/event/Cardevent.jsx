@@ -44,7 +44,7 @@ const Cardevent = () => {
   }, []);
 
   // Dynamically adjust cards per row based on screen size
-  const ResponsiveConfig = () => {
+  const getResponsiveConfig = () => {
     // Extra small devices
     if (screenSize < 576) {
       return { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 };
