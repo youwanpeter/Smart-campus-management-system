@@ -4,6 +4,7 @@ import {
   NotificationOutlined,
   UserOutlined,
   FileDoneOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import "../css/Dashboard.css";
 import Graphs from "./components/dashboard/Graphs";
@@ -15,6 +16,7 @@ const Dashboard = () => {
   const [eventCount, setEventCount] = useState(0);
   const [usersCount, setUsersCount] = useState(0);
   const [courseCount, setCourseCount] = useState(0);
+  const [taskCount, setTasksCount] = useState(0);
   const location = useLocation();
 
   // Fetch the event count from the API
@@ -62,10 +64,26 @@ const Dashboard = () => {
     fetchCourseCount();
   }, []);
 
+  // Fetch the course count from the API
+  useEffect(() => {
+    const fetchTasksCount = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/tasks");
+        const data = await response.json();
+        setTasksCount(data.length); // Set the total count of events
+      } catch (error) {
+        console.error("Error fetching event count:", error);
+      }
+    };
+
+    fetchTasksCount();
+  }, []);
+
   return (
     <div style={{ padding: "2px" }}>
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={8}>
+      <Row gutter={[16, 16]}>
+        {/* First Row */}
+        <Col xs={24} sm={12} md={6}>
           <Card
             className="card"
             title={
@@ -76,7 +94,7 @@ const Dashboard = () => {
                   alignItems: "center",
                 }}
               >
-                <span>Total Events </span>
+                <span>Total Events</span>
                 <NotificationOutlined
                   style={{ fontSize: "30px", color: "rgb(255, 17, 0)" }}
                 />
@@ -88,23 +106,22 @@ const Dashboard = () => {
               borderRadius: "16px",
             }}
           >
-            <Row>
+            <Row justify="space-between" align="middle">
               <Col>
-                <p>Total Events Assign</p>
+                <p style={{ margin: 0, fontSize: "16px", color: "#555" }}>
+                  Events Assigned
+                </p>
               </Col>
-              <Col
-                style={{
-                  marginLeft: "200px",
-                  fontSize: "20px",
-                  marginTop: "-5px",
-                }}
-              >
-                <h3>{eventCount}</h3>
+              <Col>
+                <h3 style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>
+                  {eventCount}
+                </h3>
               </Col>
             </Row>
           </Card>
         </Col>
-        <Col xs={24} sm={12} md={8}>
+
+        <Col xs={24} sm={12} md={6}>
           <Card
             className="card"
             title={
@@ -127,23 +144,23 @@ const Dashboard = () => {
               borderRadius: "16px",
             }}
           >
-            <Row>
+            <Row justify="space-between" align="middle">
               <Col>
-                <p>Total Users Assign</p>
+                <p style={{ margin: 0, fontSize: "16px", color: "#555" }}>
+                  Users Registered
+                </p>
               </Col>
-              <Col
-                style={{
-                  marginLeft: "200px",
-                  fontSize: "20px",
-                  marginTop: "-5px",
-                }}
-              >
-                <h3>{usersCount}</h3>
+              <Col>
+                <h3 style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>
+                  {usersCount}
+                </h3>
               </Col>
             </Row>
           </Card>
         </Col>
-        <Col xs={24} sm={12} md={8}>
+
+        {/* Second Row */}
+        <Col xs={24} sm={12} md={6}>
           <Card
             className="card"
             title={
@@ -156,7 +173,7 @@ const Dashboard = () => {
               >
                 <span>Total Courses</span>
                 <FileDoneOutlined
-                  style={{ fontSize: "30px", color: "rgb(17, 0, 255)" }}
+                  style={{ fontSize: "30px", color: "rgb(13, 11, 155)" }}
                 />
               </div>
             }
@@ -166,33 +183,69 @@ const Dashboard = () => {
               borderRadius: "16px",
             }}
           >
-            <Row>
+            <Row justify="space-between" align="middle">
               <Col>
-                <p>Total Courses Create</p>
+                <p style={{ margin: 0, fontSize: "16px", color: "#555" }}>
+                  Courses Created
+                </p>
               </Col>
-              <Col
+              <Col>
+                <h3 style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>
+                  {courseCount}
+                </h3>
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+
+        <Col xs={24} sm={12} md={6}>
+          <Card
+            className="card"
+            title={
+              <div
                 style={{
-                  marginLeft: "180px",
-                  fontSize: "20px",
-                  marginTop: "-5px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                <h3>{courseCount}</h3>
+                <span>Total Tasks</span>
+                <CheckCircleOutlined
+                  style={{ fontSize: "30px", color: "rgb(155, 140, 11)" }}
+                />
+              </div>
+            }
+            variant="bordered"
+            style={{
+              background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+              borderRadius: "16px",
+            }}
+          >
+            <Row justify="space-between" align="middle">
+              <Col>
+                <p style={{ margin: 0, fontSize: "16px", color: "#555" }}>
+                  Tasks Completed
+                </p>
+              </Col>
+              <Col>
+                <h3 style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>
+                  {taskCount}
+                </h3>
               </Col>
             </Row>
           </Card>
         </Col>
       </Row>
+
+      <div style={{ marginTop: 20 }}>
+        <Calendar />
+      </div>
       <div>
         <Row>
           <Col span={24}>
             <Banner />
           </Col>
         </Row>
-      </div>
-
-      <div style={{ marginTop: 20 }}>
-        <Calendar />
       </div>
     </div>
   );
