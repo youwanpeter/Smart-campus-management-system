@@ -8,7 +8,7 @@ import {
   LogoutOutlined,
   SettingOutlined,
   ScheduleOutlined,
-  BookOutlined,
+  CheckCircleOutlined,
   WechatOutlined,
   FileDoneOutlined,
   ReadOutlined,
@@ -35,6 +35,12 @@ const Sidebar = ({ userRole }) => {
           },
         ]
       : []),
+
+    {
+      key: "/task",
+      icon: <CheckCircleOutlined />,
+      label: <Link to="/task">Task</Link>,
+    },
     {
       key: "/courses",
       icon: <ReadOutlined />,

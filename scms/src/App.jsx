@@ -24,6 +24,7 @@ import "./App.css";
 import CourseList from "./pages/Courses/CourseList.jsx";
 import Subjects from "./pages/Subjects";
 import CreateCourse from "./pages/Courses/CreateCourse.jsx";
+import Task from "./pages/Task.jsx";
 
 const { Sider, Header, Content, Footer } = Layout;
 
@@ -162,6 +163,7 @@ const App = () => {
                 <Route path="/courses" element={<CourseList />} />
 
                 <Route path="/courses/create" element={<CreateCourse />} />
+                <Route path="/task" element={<Task />} />
                 <Route path="/subjects" element={<Subjects />} />
                 <Route path="/communication" element={<Communication />} />
                 <Route path="/files" element={<LecturerView />} />
