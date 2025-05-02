@@ -8,7 +8,7 @@ import {
   LogoutOutlined,
   SettingOutlined,
   ScheduleOutlined,
-  BookOutlined,
+  CheckCircleOutlined,
   WechatOutlined,
   FileDoneOutlined,
   ReadOutlined,
@@ -28,13 +28,19 @@ const Sidebar = ({ userRole }) => {
     },
     ...(userRole !== "Lecturer" && userRole !== "Student"
       ? [
-        {
-          key: "/users",
-          icon: <UserOutlined />,
-          label: <Link to="/users">Users</Link>,
-        },
-      ]
+          {
+            key: "/users",
+            icon: <UserOutlined />,
+            label: <Link to="/users">Users</Link>,
+          },
+        ]
       : []),
+
+    {
+      key: "/task",
+      icon: <CheckCircleOutlined />,
+      label: <Link to="/task">Task</Link>,
+    },
     {
       key: "/courses",
       icon: <ReadOutlined />,
@@ -47,48 +53,53 @@ const Sidebar = ({ userRole }) => {
     },
     ...(userRole !== "Admin" && userRole !== "Student"
       ? [
-        {
-          key: "/student-files",
-          icon: <FileDoneOutlined />,
-          label: <Link to="/student-files">Student Files</Link>,
-        },
-      ]
+          {
+            key: "/student-files",
+            icon: <FileDoneOutlined />,
+            label: <Link to="/student-files">Student Files</Link>,
+          },
+        ]
       : []),
+<<<<<<< HEAD
       ...(userRole !== "Admin" && userRole !== "Lecturer"
         ? [
+=======
+    ...(userRole !== "Admin" && userRole !== "Lecturer"
+      ? [
+>>>>>>> 9d2582f4fb93be3a8315642bbb81386b3d45422a
           {
             key: "/communication",
             icon: <WechatOutlined />,
             label: <Link to="/communication">Communication</Link>,
           },
         ]
-        : []),
-      ...(userRole !== "Student"
-        ? [
+      : []),
+    ...(userRole !== "Student"
+      ? [
           {
             key: "/resource",
             icon: <CompassOutlined />,
             label: <Link to="/resource">Resource</Link>,
           },
         ]
-        : []),
+      : []),
     ...(userRole !== "Lecturer" && userRole !== "Student"
       ? [
-        {
-          key: "/events",
-          icon: <ScheduleOutlined />,
-          label: <Link to="/events">Events</Link>,
-        },
-      ]
+          {
+            key: "/events",
+            icon: <ScheduleOutlined />,
+            label: <Link to="/events">Events</Link>,
+          },
+        ]
       : []),
     ...(userRole !== "Admin"
       ? [
-        {
-          key: "/previewevent",
-          icon: <ScheduleOutlined />,
-          label: <Link to="/previewevent">Events</Link>,
-        },
-      ]
+          {
+            key: "/previewevent",
+            icon: <ScheduleOutlined />,
+            label: <Link to="/previewevent">Events</Link>,
+          },
+        ]
       : []),
   ];
 

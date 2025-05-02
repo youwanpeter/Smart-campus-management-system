@@ -3,13 +3,7 @@ const mongoose = require("mongoose");
 
 // Define the schema
 const eventSchema = new mongoose.Schema({
-  event_id: {
-    type: String, // or use ObjectId, depending on your needs
-    required: false, // make it optional if it's auto-generated
-    default: function () {
-      return new mongoose.Types.ObjectId(); // generates a new ObjectId if event_id is not provided
-    },
-  },
+  event_id: { type: String, unique: true },
   event_name: {
     type: String,
     required: true,

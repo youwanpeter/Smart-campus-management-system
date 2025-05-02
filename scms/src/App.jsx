@@ -8,7 +8,7 @@ import {
 import { Button, Layout, Row, Col, theme } from "antd";
 import Sidebar from "./components/Sidebar";
 import CustomHeader from "./components/CustomHeader";
-import { MenuUnfoldOutlined } from "@ant-design/icons";
+import { MenuUnfoldOutlined, LogoutOutlined } from "@ant-design/icons";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Schedule from "./pages/Schedule";
@@ -26,12 +26,39 @@ import "./App.css";
 import CourseList from "./pages/Courses/CourseList.jsx";
 import Subjects from "./pages/Subjects";
 import CreateCourse from "./pages/Courses/CreateCourse.jsx";
+import Task from "./pages/Task.jsx";
 
-const { Sider, Header, Content } = Layout;
+const { Sider, Header, Content, Footer } = Layout;
+
+const footerStyle = {
+  textAlign: "center",
+  color: "#fff",
+  backgroundColor: "#4f6f52",
+};
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [token, setToken] = useState("");
+
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed);
+  };
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) {
+      setToken(savedToken);
+      axios
+        .get("/api/auth/me", {
+          headers: { Authorization: `Bearer ${savedToken}` },
+        })
+        .then((res) => setCurrentUser(res.data))
+        .catch((err) => console.error(err));
+    }
+  }, []);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -74,12 +101,6 @@ const App = () => {
     window.location.href = "/";
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    setIsAuthenticated(false);
-    window.location.href = "/login";
-  };
-
   const App = () => {
     return (
       <div>
@@ -91,12 +112,18 @@ const App = () => {
 
   const AuthenticatedLayout = () => (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider theme="light" trigger={null} collapsible className="sider">
-        <Sidebar userRole={userRole} />{" "}
+      <Sider
+        theme="light"
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        className="sider"
+      >
+        <Sidebar userRole={userRole} />
         <Button
           type="text"
-          icon={<MenuUnfoldOutlined />}
-          onClick={handleLogout}
+          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuUnfoldOutlined />}
+          onClick={toggleCollapse}
           className="trigger-btn"
         />
       </Sider>
@@ -136,25 +163,45 @@ const App = () => {
                 )}
 
                 <Route path="/courses" element={<CourseList />} />
+
                 <Route path="/courses/create" element={<CreateCourse />} />
+                <Route path="/task" element={<Task />} />
                 <Route path="/subjects" element={<Subjects />} />
+<<<<<<< HEAD
+=======
+                <Route path="/communication" element={<Communication />} />
+                <Route path="/files" element={<LecturerView />} />
+>>>>>>> 9d2582f4fb93be3a8315642bbb81386b3d45422a
                 {userRole !== "Admin" && userRole !== "Lecturer" && (
                   <Route path="/communication" element={<Communication />} />
                 )}
                 {userRole !== "Admin" && userRole !== "Student" && (
                   <Route path="/student-files" element={<LecturerView />} />
                 )}
+<<<<<<< HEAD
                 <Route path="/reports" element={<Reports />} />
+=======
+
+                <Route path="/logout" element={<Logout />} />
+>>>>>>> 9d2582f4fb93be3a8315642bbb81386b3d45422a
 
                 <Route path="/users" element={<Navigate to="/" replace />} />
                 <Route path="/resource" element={<Navigate to="/" replace />} />
-                <Route path="/student-file" element={<Navigate to="/" replace />} />
-                <Route path="/communication" element={<Navigate to="/" replace />} />
-
+                <Route
+                  path="/student-file"
+                  element={<Navigate to="/" replace />}
+                />
+                <Route
+                  path="/communication"
+                  element={<Navigate to="/" replace />}
+                />
               </Routes>
             </Col>
           </Row>
         </Content>
+        <Footer style={footerStyle}>
+          Design and Developed By <b>Si Media Labs</b>
+        </Footer>
       </Layout>
     </Layout>
   );
